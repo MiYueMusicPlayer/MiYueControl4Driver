@@ -1,0 +1,2249 @@
+package.preload['commands'] = (function (...)
+--
+-- Untitled.lua
+--
+
+--处理编程选项
+
+function GetLocalMusic()
+     local list ={}
+    for i = 1, #g_LocalMusic do
+	   table.insert(list,g_LocalMusic[i].title)
+    end
+    return list
+end
+
+function GetPlayList()
+     local list ={}
+    for i = 1, #g_songlist do
+	   table.insert(list,g_songlist[i].songlistTitle)
+    end
+    return list
+end
+
+function GetBoards()
+     local list ={}
+    for i = 1, #g_CollectedBoards do
+	   table.insert(list,g_CollectedBoards[i].songlistTitle)
+    end
+    return list
+end
+
+function GetRadios()
+     local list ={}
+    for i = 1, #g_CollectedRadios do
+	   table.insert(list,g_CollectedRadios[i].title)
+    end
+    return list
+end
+
+--------Actions--------
+function ExecuteCommand(strCommand, tParams)
+	print("ExecuteCommand function called with : " .. strCommand)
+	if (tParams ~= nil) then
+		PrintTable(tParams)
+	end
+	if (strCommand == "LUA_ACTION") then
+		for cmd,cmdv in pairs(tParams) do
+			if cmd == "ACTION" then
+				if (cmdv == "Scan") then
+				    ProxyHelper.Scan()
+				end
+			else
+				
+			end
+		end
+	elseif(strCommand == "SelectLocalmusic") then
+		  SendPlayCommand(tParams.LocalMusic)
+	elseif(strCommand == "SelectPlayList") then
+		   for k,v in pairs(g_songlist) do
+			 if(v.songlistTitle == tParams.PlayList) then
+			 
+				SendPlaylistCommand(v.id)
+			 end
+		  end
+	elseif(strCommand == "SelectBoards") then
+		  for k,v in pairs(g_CollectedBoards) do
+			 if(v.songlistTitle == tParams.Boards) then
+			 
+				SendPlaylistCommand(v.id)
+			 end
+		  end
+	elseif(strCommand == "SelectRadios") then
+		 SendPlayCommand(tParams.Radios)
+     elseif(strCommand == "AUX") then
+		  if(tParams.AUX == "ON") then
+		     print("turn on aux")
+		  local cmd = '{"action":"action.aux.switch","openAux":true}'
+		  ProxyHelper.SendCommand(cmd)
+		  else
+		  local cmd = '{"action":"action.aux.switch","openAux":false}'
+		  ProxyHelper.SendCommand(cmd)
+		  end
+     elseif(strCommand == "BLUETOOTH") then
+		  if(tParams.Bluetooth == "ON") then
+		      local cmd = '{"action":"action.bluetooth.switch","openBluetooth":true}'
+			 ProxyHelper.SendCommand(cmd)
+		  else
+			 local cmd = '{"action":"action.bluetooth.switch","openBluetooth":false}'
+			 ProxyHelper.SendCommand(cmd)
+		  end
+     elseif(strCommand == "SPDIF") then
+		  if(tParams.SPDIF == "ON") then
+		      local cmd = '{"action":"action.spdif.switch","openSpdif":true}'
+			 ProxyHelper.SendCommand(cmd)
+		  else
+		      local cmd = '{"action":"action.spdif.switch","openSpdif":false}'
+			 ProxyHelper.SendCommand(cmd)
+	       end
+     elseif(strCommand == "PLAY MODE") then
+	       local message = nil
+		  if(tParams.PlayMode == "Repeat") then
+			  message  = '{"action": "action.request.switchplaytype","playType": 0}'
+			 --ProxyHelper.SendCommand(message)
+		  
+		  elseif(tParams.PlayMode == "Shuffle") then
+			  message  = '{"action": "action.request.switchplaytype","playType": 2}'
+			 --ProxyHelper.SendCommand(message)
+		  elseif(tParams.PlayMode == "Single cycle") then
+			  message  = '{"action": "action.request.switchplaytype","playType": 1}'
+		  else
+			 message  = '{"action": "action.request.switchplaytype","playType": 3}'
+	
+		  end
+		  ProxyHelper.SendCommand(message)
+--Single cycle
+		  
+	end	
+end
+
+function SendPlayCommand(key)
+     local data = json:encode(g_MediaByKey[key])
+		  data = '{"action": "action.request.music","infos":[' ..data .. "]}"
+		  ProxyHelper.SendCommand(data)
+end
+
+function SendPlaylistCommand(id)
+   local cmd = '{"action":"action.play.songlist","id":'.. id ..',"musicIndex":0}'
+   ProxyHelper.SendCommand(cmd)
+end
+ end)
+package.preload['action'] = (function (...)
+
+ProxyHelper = {}
+ProxyHelper.TCPReceiveBuf = ""
+ProxyHelper.CommandList = {}
+
+DriverHelper = {}
+gCurrentScan = 0
+
+function ProxyHelper.Scan()
+	ProxyHelper.GetNextMediaLib(1)
+	--gScan = true
+	-- body
+	g_SCAN = true
+	DriverHelper.CheckScan = DriverHelper.AddTimer(DriverHelper.CheckScan, 10, "MINUTES", true);
+	--gCurrentScan = gCurrentScan + 1
+	C4:UpdateProperty("Scan Progress"," Starting Scan !!! ")
+end
+
+function ProxyHelper.BuildCommand(data)
+	return data .."\n\v\f\r"
+end
+
+function ProxyHelper.SendCommand(cmd)
+     print(cmd)
+	C4:SendToNetwork(6001,60001,ProxyHelper.BuildCommand(cmd))
+end
+
+function ProxyHelper.AddCommandList(cmd, pos)
+	--if (inSonaLicHelper.HasActivedLicense() ~= true) then return; end
+	if (pos ~= nil and #ProxyHelper.CommandList > 0 ) then
+		table.insert(ProxyHelper.CommandList, pos, cmd);
+	else
+		table.insert(ProxyHelper.CommandList, cmd);
+	end
+end
+
+function ProxyHelper.SendCommandList()
+	if (#ProxyHelper.CommandList > 0) then
+		local cmd = ProxyHelper.BuildCommand(ProxyHelper.CommandList[1])
+		ProxyHelper.SendCommand(cmd)
+		print("Send cmd to player "..cmd)
+		table.remove(ProxyHelper.CommandList, 1);	
+     else
+	   if(gScan) then
+		  print("Scan is compeleted !!!")
+		  gScan = false
+		  --BuildListIteams()
+	   end
+	end
+end
+
+function ProxyHelper.SaveInfo(musictype,musicdata)
+	-- 保存媒体数据
+	local musicname = musictype .. ".txt"
+	C4:FileDelete(musicname);
+	local fh = C4:FileOpen(musicname)
+	local info = {}
+	if (fh ~= -1) then	
+		C4:FileWriteString(fh,musicdata)
+		C4:FileClose(fh)
+	end
+end
+
+
+function ProxyHelper.ReadInfo( musictype )
+	local musicname = musictype ..".txt"
+	local fh = C4:FileOpen(musicname)
+	local inf = {}
+	if(fh ~= -1) then
+		local fileSize = C4:FileGetSize(fh)
+		C4:FileSetPos(fh,0)
+		local rawdata = C4:FileRead(fh,fileSize)
+		info = json:decode(rawdata)
+	end
+	return info
+end
+
+--[[
+function ProxyHelper.ConnectServer()		
+	-- body
+	C4:CreateNetworkConnection (6001, g_ServerIPAddress, "TCP")
+	
+	C4:NetConnect(6001, 60001)
+end
+]]-- 
+function GetNowplayList() 	-- 获取当前播放列表
+	local cmd = '{"action":"action.request.musiclist"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function OnConnectionStatusChanged(idBinding, nPort, strStatus)
+    C4:UpdateProperty("Connection Status", strStatus)
+      if (idBinding == 6001) then
+		--  gConnectStatus = strStatus
+        if (strStatus == "ONLINE") then
+          	print("Connect was successful.  Send URL packet.")
+			GetCurrentVolume()
+			--DriverHelper.KillTimer(DriverHelper.Reconnect)
+        else
+        	print("send connect to moudel")
+        	--ProxyHelper.ConnectServer()
+        	--DriverHelper.Reconnect = DriverHelper.AddTimer(DriverHelper.Reconnect, 10, "MINUTES", true);
+	   end 
+      end
+end
+
+
+
+function GetCurrentVolume()
+    local cmd = '{"action":"action.request.getVolume"}'
+    ProxyHelper.SendCommand(cmd)
+end
+
+
+--进度条
+
+function ConvertTime (data, incHours)
+	-- Converts a string of [HH:]MM:SS to an integer representing the number of seconds
+	-- Converts an integer number of seconds to a string of [HH:]MM:SS. If HH is zero, it is omitted unless incHours is true
+
+	if (data == nil) then
+		return (0)
+	elseif (type (data) == 'number') then
+		local strTime = ''
+		local minutes = ''
+		local seconds = ''
+		local hours = string.format('%d', data / 3600000)
+		data = data - (hours * 3600000)
+
+		if (hours ~= '0' or incHours) then
+			strTime = hours .. ':'
+			minutes = string.format('%02d', data / 60000)
+		else
+			minutes = string.format('%d', data / 60000)
+		end
+
+		data = data - (minutes * 60000)
+		seconds = string.format('%02d', data/1000)
+		strTime = strTime .. minutes .. ':' .. seconds
+		return strTime
+
+	elseif (type (data) == 'string') then
+		local hours, minutes, seconds = string.match (data, '^(%d-):(%d-):?(%d-)$')
+
+		if (hours == '') then hours = nil end
+		if (minutes == '') then minutes = nil end
+		if (seconds == '') then seconds = nil end
+
+		if (hours and not minutes) then minutes = hours hours = 0
+		elseif (minutes and not hours ) then hours = 0
+		elseif (not minutes and not hours) then minutes = 0 hours = 0 seconds = seconds or 0
+		end
+
+		hours, minutes, seconds = tonumber (hours), tonumber (minutes), tonumber (seconds)
+		return ((hours * 3600) + (minutes * 60) + seconds)
+	end
+end
+function UpdateProgress (duration,elapsed)
+	
+
+	local label = ConvertTime (elapsed) .. ' / -' .. ConvertTime (duration)
+
+	local progressInfo = {
+							length = duration,	-- integer for setting size of duration bar
+							offset = elapsed,	-- integer for setting size of elapsed indicator inside duration bar
+							label = label,		-- text string to be displayed next to duration bar
+						}
+       local data = XMLTag(nil,progressInfo,false,false)
+      -- print(data)
+       local tResponse = {}
+       tResponse["NAME"] = "ProgressChanged"
+       tResponse["EVTARGS"] = data
+	SendToProxy(5001, "SEND_EVENT", tResponse,"COMMAND")
+end
+
+
+ end)
+package.preload['parsemessage'] = (function (...)
+--
+-- Untitled.lua
+--
+ParseMessage = {}
+
+function ParseMessage.LocalMusic( strData )
+	ProxyHelper.LocalMusic = strData.infos or {}
+	ProxyHelper.SaveInfo("localmusic",json:encode(strData.infos))  --本地音乐保存为localmusic.txt
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(2)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress","获取本地歌曲信息中")
+     end
+end
+
+function ParseMessage.RadioInfo(strData)  --电台数据
+	-- body
+	print("starting to parsemessage radio")
+	ProxyHelper.RadioList = strData.infos or {}
+	ProxyHelper.SaveInfo("radiolist",json:encode(strData.infos))
+     for k,v in pairs(ProxyHelper.RadioList) do
+		 local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
+		 ProxyHelper.AddCommandList(cmd)
+	end
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(3)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress","获取在线电台数据中!")
+     end
+end
+
+
+function ParseMessage.CloudInfo( strData )   --网易云数据下载到本地
+
+    print("starting to parse wangyiyun data")
+	ProxyHelper.CloudList = strData.infos or {}
+	ProxyHelper.SaveInfo("wangyiyun",json:encode(strData.infos))
+    for k,v in pairs(ProxyHelper.CloudList) do
+		local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
+		ProxyHelper.AddCommandList(cmd)
+	end
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(4)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress"," 获取网易云信息中 !")
+     end
+	--gScan = true
+end
+
+function ParseMessage.GetcollectedSonglist(strData)  --获取下载收藏歌单
+	-- body
+	ProxyHelper.SongList = strData.infos or {}
+	ProxyHelper.SaveInfo("songlist",json:encode(strData.infos))
+    for k,v in pairs(ProxyHelper.SongList) do
+		local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
+		ProxyHelper.AddCommandList(cmd)
+	end
+	if(g_SCAN) then
+	   gCurrentScan = gCurrentScan + 1
+	    g_SCAN = false
+	    C4:UpdateProperty("Scan Progress"," 歌曲信息获取完成!")
+	    local tArgs = {}
+	    local tParams = {}
+	    tArgs["Id"] = "SettingsNotification"
+	    tArgs["Title"] = "扫描完成"
+	    tArgs["Message"] = "媒体库扫描已完成。可以进行操作。不需要频繁扫描。"
+	    tParams["EVTARGS"] = BuildSimpleXml(nil, tArgs, true)
+	    tParams["NAME"] = "DriverNotification"
+	    SendToProxy(5001, "SEND_EVENT", tParams, "COMMAND")
+	    DriverHelper.UpdateMediaInfo = DriverHelper.AddTimer(DriverHelper.UpdateMediaInfo, 10, "SECONDS", false);
+	    ProxyHelper.ConnectServer()
+    end
+end
+
+function ParseMessage.GetcollectedRadios(strData)  --获取收藏电台
+	-- body
+	print("starting to parse collectedRadios data")
+	ProxyHelper.CollectedRadios = strData.infos or {}
+	ProxyHelper.SaveInfo("CollectedRadios",json:encode(strData.infos))
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(8)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress"," 获取收藏电台数据中")
+    end
+end
+
+function ParseMessage.GetcollectedBoards(strData ) --获取收藏的排行榜
+	-- body
+	print("starting to parse collectedBoards data")
+	ProxyHelper.CollectedBoards = strData.infos or {}
+	ProxyHelper.SaveInfo("CollectedBoards",json:encode(strData.infos))
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(7)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress"," 获取收藏榜单数据中")
+    end
+end
+
+function ParseMessage.GetcollectedMusic( strData )  -- 获取收藏的歌曲
+	print("starting to parse CollectedMusic data")
+	ProxyHelper.CollectedMusic = strData.infos or {}
+	ProxyHelper.SaveInfo("CollectedMusic",json:encode(strData.infos))
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(6)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress","获取收藏的歌曲数据中 !")
+     end
+end
+
+
+function ParseMessage.GetDouban(strData)
+    ProxyHelper.Douban = strData.infos or {}
+	ProxyHelper.SaveInfo("douban",json:encode(strData.infos))
+	for k,v in pairs(ProxyHelper.Douban) do
+		local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
+		ProxyHelper.AddCommandList(cmd)
+	end
+	if(g_SCAN) then
+	   ProxyHelper.GetNextMediaLib(5)
+	   gCurrentScan = gCurrentScan + 1
+	   C4:UpdateProperty("Scan Progress"," 获取豆瓣FM数据中!")
+     end
+end
+
+function ParseMessage.BoardMusicInfos( strData )   --每个歌单详细数据的下载保存
+	-- 
+	print("starting to parse music infos")
+	ProxyHelper.MusicInfos = strData.infos or {}
+	--strData.infos["index"] = strData.id
+	ProxyHelper.SaveInfo(strData.id,json:encode(strData.infos))
+	--gScan = true
+end
+
+--浏览本地音乐的时候处理本地音乐
+function BrowseLocalMusic(idBinding,tParams)
+    local tListItems = {}
+    g_LocalMusic = ProxyHelper.ReadInfo("localmusic") --从本地音乐文件里面读取数据 创建表格 后期放到初始化中
+    local length = #g_LocalMusic
+    for i = 1 ,length do
+	   local album = g_LocalMusic[i].album
+	   local singer = g_LocalMusic[i].singer
+	   local songSrc = g_LocalMusic[i].songSrc
+	   local title = g_LocalMusic[i].title
+	   local fileName = g_LocalMusic[i].fileName
+	   local fileUrl = g_LocalMusic[i].fileUrl
+	   local isNetUrl = g_LocalMusic[i].isNetUrl
+	   local tmp = {type = "song" ,folder = "false",text = title,subtext = "",key = title,listtype = "localmusic",indexID = i-1}
+	   table.insert(tListItems,tmp)
+    end
+    build_MediaByKeyTable(g_LocalMusic)
+    DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseRadioList(idBinding,tParams)
+	-- body
+	local tListItems = {}
+	g_RadioList = ProxyHelper.ReadInfo("radiolist")
+	local length = #g_RadioList
+	for i = 1 ,length do 
+		local id = g_RadioList[i].id
+		local title = g_RadioList[i].songlistTitle
+		print(title)
+		local tmp = {type = "radio" , folder = "true" , subtext = "" ,text = title, key = id}
+		table.insert(tListItems,tmp)
+	end
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseDouban(idBinding,tParams)
+	-- body
+	local tListItems = {}
+	g_Douban = ProxyHelper.ReadInfo("douban")
+	local length = #g_Douban
+	for i = 1 ,length do 
+		local id = g_Douban[i].id
+		local title = g_Douban[i].songlistTitle
+		--print(title)
+		local tmp = {type = "douban" , folder = "true" , subtext = "" ,text = title, key = id}
+		table.insert(tListItems,tmp)
+	end
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseWangYiYun(idBinding,tParams)
+    local tListItems = {}
+    g_WangYiYun = ProxyHelper.ReadInfo("wangyiyun")
+    local length = #g_WangYiYun
+    for i = 1 ,length do 
+		local id = g_WangYiYun[i].id
+		local title = g_WangYiYun[i].songlistTitle
+		local ImageUrl = g_WangYiYun[i].iconUrl
+		local tmp = {type = "wangyiyun" , folder = "true" , subtext = "" ,text = title, key = id,ImageUrl = ImageUrl,indexID = id,musicindex = i}
+		table.insert(tListItems,tmp)
+	end
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseCollectedBoards(idBinding,tParams)
+     local tListItems = {}
+    g_CollectedBoards = ProxyHelper.ReadInfo("CollectedBoards")
+    local length = #g_CollectedBoards
+    for i = 1 ,length do 
+		local id = g_CollectedBoards[i].id
+		local title = g_CollectedBoards[i].songlistTitle
+		local ImageUrl = g_CollectedBoards[i].iconUrl
+		local tmp = {type = "cboards" , folder = "true" , subtext = "" ,text = title, listtype = "CollectedBoards", key = id,ImageUrl = ImageUrl,indexID = id,musicindex = i}
+		table.insert(tListItems,tmp)
+	end
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseBoardMusicInfos(idBinding,tParams,key)
+	-- body
+	local k = key
+	local tListItems = {}
+	
+	g_boardMusicInfo[k] = ProxyHelper.ReadInfo(k) 
+	g_currentlist = g_boardMusicInfo[k] 
+	local length = #(g_boardMusicInfo[k])
+	for i = 1,length do
+		local title = g_boardMusicInfo[k][i].title
+		local songId = g_boardMusicInfo[k][i].songId
+		local img = g_boardMusicInfo[k][i].pic
+		local isNetUrl = g_boardMusicInfo[k][i].isNetUrl
+		local fileName = g_boardMusicInfo[k][i].fileName
+		local fileUrl = g_boardMusicInfo[k][i].fileUrl
+		local singer = g_boardMusicInfo[k][i].singer
+		local songSrc = g_boardMusicInfo[k][i].songSrc
+		local indexID = g_boardMusicInfo[k][i].id
+		local listtype = ""
+		if(songSrc == 7) then
+		  listtype = "CollectedBoards"
+	     end
+		local tmp = {type = "radio", folder = "false", text = title, songSrc = songSrc, key = title,ImageUrl = img,indexID = indexID,musicindex = i,listtype = listtype}
+		table.insert(tListItems,tmp)
+	end
+	build_MediaByKeyTable(g_boardMusicInfo[k])
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseCollectedMusic(idBinding,tParams)
+     local tListItems = {}
+    g_CollectedMusic = ProxyHelper.ReadInfo("CollectedMusic")  --从本地音乐文件里面读取数据 创建表格 后期放到初始化中
+    local length = #g_CollectedMusic
+    for i = 1 ,length do
+	   local album = g_CollectedMusic[i].album
+	   local singer = g_CollectedMusic[i].singer
+	   local songSrc = g_CollectedMusic[i].songSrc
+	   local title = g_CollectedMusic[i].title
+	   local fileName = g_CollectedMusic[i].fileName
+	   local fileUrl = g_CollectedMusic[i].fileUrl
+	   local isNetUrl = g_CollectedMusic[i].isNetUrl
+	   if(isNetUrl == 0) then 
+	   		local tmp = {type = "song" ,listtype = "CollectedMusic",folder = "false",text = title,subtext = "",singer= singer,key = title,ImageUrl = "",musicindex = i}
+	   		table.insert(tListItems,tmp)
+	   else
+	   		local songId = g_CollectedMusic[i].songId
+	   		local img = g_CollectedMusic[i].pic
+	   		local tmp = {type = "radio", folder = "false", listtype = "CollectedMusic",text = title, singer = singer ,songSrc = songSrc, key = title,ImageUrl = img,musicindex = i}
+	   		table.insert(tListItems,tmp)
+	   	end
+    end
+    build_MediaByKeyTable(g_CollectedMusic)
+    DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseCollectedRadios(idBinding,tParams)
+
+	local tListItems = {}
+	g_CollectedRadios = ProxyHelper.ReadInfo("CollectedRadios") 
+	local length = #(g_CollectedRadios)
+	for i = 1,length do
+		local title = g_CollectedRadios[i].title
+		local songId = g_CollectedRadios[i].songId
+		local img = g_CollectedRadios[i].pic
+		local isNetUrl = g_CollectedRadios[i].isNetUrl
+		local fileName = g_CollectedRadios[i].fileName
+		local fileUrl = g_CollectedRadios[i].fileUrl
+		local singer = g_CollectedRadios[i].singer
+		local songSrc = g_CollectedRadios[i].songSrc
+		local indexID = g_CollectedRadios[i].id
+		local tmp = {type = "radio", folder = "false", text = title, songSrc = songSrc, key = title,ImageUrl = img,indexID = indexID,musicindex = i}
+		table.insert(tListItems,tmp)
+	end
+	build_MediaByKeyTable(g_CollectedRadios)
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function BrowseCollectedSonglist(idBinding, tParams)
+     local tListItems = {}
+    g_songlist = ProxyHelper.ReadInfo("songlist")
+    local length = #g_songlist
+    for i = 1 ,length do 
+		local id = g_songlist[i].id
+		local title = g_songlist[i].songlistTitle
+		local ImageUrl = g_songlist[i].iconUrl
+		local tmp = {type = "songlist" , folder = "true" , subtext = "" ,text = title, key = id,ImageUrl = ImageUrl,indexID = id,musicindex = i}
+		table.insert(tListItems,tmp)
+	end
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
+end
+
+function build_MediaByKeyTable(data)
+    
+    if(type(data) == "table") then
+	   print("start to buidmedia")
+	   local key,songId,img,isNetUrl,fileName,fileUrl,singer,songSrc,strType,indexID
+	   for i,v in pairs(data) do
+		  title = v.title
+		  isNetUrl = v.isNetUrl
+		  singer = v.singer
+		  songSrc = v.songSrc
+		  fileName = v.fileName
+		  fileUrl = v.fileUrl
+		  songId = v.songId
+		  indexID = v.indexID
+		  --print("songSrc is " .. songSrc)
+		  --print("title:"..title .. "isNetUrl : " .. isNetUrl .. "singer is " .. singer.. "songSrc is " .. songSrc .. "fileName is " .. fileName .. "fileUrl is " .. fileUrl)
+		  if(isNetUrl == 0) then
+		      --print("22222222")
+			 g_MediaByKey[v.title] = {fileName = fileName,fileUrl = fileUrl,isNetUrl = isNetUrl,singer = singer,songSrc = songSrc,title = title,key = title }
+		  else
+		    --  print("333333")
+			-- print("title:"..title .. "isNetUrl : " .. isNetUrl .. "singer is " .. singer.. "songSrc is " .. songSrc .. "fileName is " .. fileName .. "fileUrl is " .. fileUrl .. "songId is " .. songId)
+			img = v.pic
+			 g_MediaByKey[v.title] = {fileName = fileName,fileUrl = fileUrl,isNetUrl = isNetUrl,singer = singer,songSrc = songSrc,title = title,songId = songId, key = title,pic = img,indexID = indexID}
+		  end
+	   end
+		  
+    end
+end
+ end)
+package.preload['feedback'] = (function (...)
+--
+-- Untitled.lua
+--
+gCurrentVolume = 0
+tmpQueue = ""
+function ParseFeedback(strData)
+	-- body
+
+	--print("Begin to Parse DATA" .. strData)
+ 	
+	local response = json:decode(strData)
+	ProxyHelper.TCPReceiveBuf = ""
+
+	if(response.result == 400) then
+		return
+	end
+    if(response.result == 200) then
+	    local msg_id = {["action.request.getlocalMusic"] = "LocalMusic",["action.request.getradioInfo"] = "RadioInfo",
+						    ["action.request.getwangyiboards"] = "CloudInfo",["action.request.boardMusicInfos"] = "BoardMusicInfos",
+						    ["action.request.collectedMusic"] = "GetcollectedMusic",["action.request.collectedBoards"] = "GetcollectedBoards",
+						    ["action.request.collectedRadios"] = "GetcollectedRadios",["action.request.collectedSonglist"] = "GetcollectedSonglist",["action.douban.getdirinfos"] = "GetDouban"}
+	   if(type(ParseMessage[msg_id[response.action]]) == "function") then
+	   
+		  ParseMessage[msg_id[response.action]](response)
+		  
+	   end
+	   
+	   if(response.action == "action.response.localMusicChanged") then
+		  ProxyHelper.GetNextMediaLib(1)
+	   end
+	   
+	   if(response.action == "action.response.netMusicUpdateComplete") then
+		  ProxyHelper.Scan()
+	   end
+	   
+	   if(response.action == "action.response.currentMusicList") then
+		  print("get gonowplianghsdasdas")
+			   --local Nowplaylist = {}
+		   if (gNowPlaying[1] ~= nil) then
+			   gNowPlaying = {} 
+				    --gCurrentSongIndex = 1	
+		   end
+		   
+		   for k,v in pairs(response.infos) do 
+			  gNowPlaying[k] = {Title = v.title,fileName = v.fileName,songSrc = v.songSrc,singer = v.singer,ImageUrl = v.pic,songId = v.songId,fileUrl = v.fileUrl,Id = k-1}
+		   end
+		   
+		    
+       end
+    
+    
+	   
+	    if(response.action == "action.response.playerposition") then
+	         local volume = math.floor(tonumber(response.volumeValue))
+		    if(gCurrentVolume ~= volume) then
+				--UpdateVolume(gCurrentVolume)
+				gCurrentVolume = volume
+				UpdateVolume(gCurrentVolume)
+		    end
+		    local SongTitle = response.info.title
+		    if(response.isPlaying) then
+				if(SongTitle ~= gCurrentSongTitle) then
+				    gCurrentSongTitle = SongTitle
+				    
+				    if(gNowPlaying == nil) then
+					   GetNowplayList() 	
+				    end
+				    for k,v in pairs(gNowPlaying) do
+					   if(gCurrentSongTitle == v.Title) then
+							 gCurrentSongIndex = k
+					   end
+				    end
+				    UpdateMediaInfo(5001,gNowPlaying[gCurrentSongIndex].Title,gNowPlaying[gCurrentSongIndex].singer,"","",gNowPlaying[gCurrentSongIndex].ImageUrl,g_RoomID,"secondary", "True")
+				    local data = CacheNowPlaying()
+				    QueueChanged(5001, nil, g_RoomID, data)
+				    
+			     end
+			    if(gQueues["STATE"] ~= "PLAY") then
+				    DashboardChanged("PLAY")
+				    gQueues["STATE"] = "PLAY"
+			    end
+			    
+				 
+			    --进度条
+			   --[[ local duration = tonumber(response.info.duration)
+			    local position = tonumber(response.position)
+			    if(duration >0 and position >0) then
+			   -- print(tonumber(response.position))
+				    UpdateProgress (duration,position)
+			   else
+				duration = 0
+				position = 0
+				UpdateProgress (duration,position)
+			   end]]--
+			 else
+				DashboardChanged("PAUSE")
+				gQueues["STATE"] = "PAUSE"
+				--gCurrentSongTitle = ""
+		    end
+	   
+	   elseif(response.action == "action.request.musiclist") then
+		  
+			   --local Nowplaylist = {}
+		   if (gNowPlaying[1] ~= nil) then
+			   gNowPlaying = {} 
+				    --gCurrentSongIndex = 1	
+		   end
+		   
+		   for k,v in pairs(response.infos) do 
+			  gNowPlaying[k] = {Title = v.title,fileName = v.fileName,songSrc = v.songSrc,singer = v.singer,ImageUrl = v.pic,songId = v.songId,fileUrl = v.fileUrl,Id = k-1}
+			
+			  if(gCurrentSongTitle == v.title) then
+				gCurrentSongIndex = k
+			  end
+		   end
+		   
+		    UpdateMediaInfo(5001,gNowPlaying[gCurrentSongIndex].Title,gNowPlaying[gCurrentSongIndex].singer,"","",gNowPlaying[gCurrentSongIndex].ImageUrl,g_RoomID,"secondary", "True")
+		   
+		   local data = CacheNowPlaying()
+		   QueueChanged(5001, nil, g_RoomID, data)
+		  
+	   
+	   elseif(response.action == "action.collect.musics") then
+	   
+			 ProxyHelper.GetNextMediaLib(5)
+			 
+       elseif(response.action == "action.response.collectDataChanged") then
+			 local flag = tonumber(response.flag)
+			 if(flag == -1) then
+				ProxyHelper.GetNextMediaLib(5)
+			 elseif(flag == -2) then
+				ProxyHelper.GetNextMediaLib(7)
+			 elseif(flag == -3) then
+				ProxyHelper.GetNextMediaLib(6)
+			 elseif(flag == -4) then
+				ProxyHelper.GetNextMediaLib(8)
+			 elseif(flag >0) then
+				ProxyHelper.GetNextMediaLib(8)
+			 end
+			 
+        elseif(response.action == "action.request.getVolume") then
+		    gCurrentVolume = math.floor(tonumber(response.volumeValue))
+		    UpdateVolume(gCurrentVolume)
+	   elseif(response.action == "action.request.changeVolume") then
+		    GetCurrentVolume()
+	   end
+	   
+		 
+    end
+end
+
+
+function CacheNowPlaying()
+    local queue = {}
+		  -- print("gNOWPLAYING IS :" .. #gNowPlaying)
+				    if(#gNowPlaying < 6) then
+					    
+					    for i = 1, #gNowPlaying do
+						  --gNowPlaying[gCurrentSongIndex + i -1].ImageUrl = nil
+						  queue[i] = gNowPlaying[gCurrentSongIndex + i -1]
+					    end
+				    else
+					   for i = 1, 5 do
+						 -- gNowPlaying[gCurrentSongIndex + i -1].ImageUrl = nil
+						  queue[i] = gNowPlaying[gCurrentSongIndex + i -1]
+					    end
+				    end
+			    -- print("queue leng is " ..#queue
+				 --PrintTable(queue)
+				    
+					   if(#queue > 1) then
+						  
+						  table.insert(queue,1,{Title = 'Now Playing', isHeader = "true"})
+						  table.insert(queue,3,{Title = 'Up Next', isHeader = "true"})
+					   else
+						  table.insert(queue,1,{Title = 'Now Playing', isHeader = "true"})
+					   end
+					   
+					   
+					   local List = BuildListXml(queue,true)
+					   local NowPlayingIndex = BuildSimpleXml(nil, {["NowPlayingIndex"] = gCurrentSongIndex -1})
+					   local data = NowPlayingIndex .. List
+					   tmpQueue = data
+					   
+					   return tmpQueue
+end end)
+package.preload['cmd'] = (function (...)
+--所有的命令调用对外发送和协议内的命令实现
+
+PRX_CMD = {}
+
+function PRX_CMD.AddToFavorites(idBinding,tParams) --添加收藏
+    local args = ParseProxyCommandArgs(tParams)
+    if(tonumber(args.songSrc) == 8 or tonumber(args.songSrc) == 5 ) then
+	     message = '{"action":"action.collect.radios","id":'..args.IndexID.."}"
+	   
+    else
+	   message = json:encode(g_MediaByKey[args.key])
+		    --print(data)
+	   message = '{"action": "action.collect.musics","infos":[' ..message .. "]}"
+    end
+    ProxyHelper.SendCommand(message)
+    --ProxyHelper.GetNextMediaLib(6)
+end
+--重要维护对象，页面
+function PRX_CMD.GetBrowseStationsMenu(idBinding, tParams) --浏览
+	--print("GetBrowseStationsMenu (" .. idBinding .. ", " .. tParams.SEQ .. ") for nav " .. tParams.NAVID)
+	local args = ParseProxyCommandArgs(tParams)
+
+	local tListItems = {}
+	local url
+	local isRootMenu = false
+	local screen = args.screen
+	local key = args.key
+	
+	
+		if (key == "radio") then
+			BrowseRadioList(idBinding,tParams)
+		elseif (key == "local")	then
+			BrowseLocalMusic(idBinding,tParams)
+		elseif (key == "wangyi")	then		
+			BrowseWangYiYun(idBinding,tParams)
+		elseif(key == "douban") then
+			 BrowseDouban(idBinding,tParams)
+		elseif(key == "blue") then
+		elseif(key == nil) then
+			tListItems = g_browse_mainmenu
+			DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems)
+	     else
+		  g_selectboardsid = key
+		  g_currentboards = args.text
+		  BrowseBoardMusicInfos(idBinding,tParams,key)
+		  
+		  
+		end
+		
+
+	
+	
+end 
+
+function PRX_CMD.GetBrowseFavoritesMenu(idBinding, tParams) --收藏
+   -- print("GetBrowseStationsMenu (" .. idBinding .. ", " .. tParams.SEQ .. ") for nav " .. tParams.NAVID)
+	local args = ParseProxyCommandArgs(tParams)
+
+	local tListItems = {}
+	local url
+	local isRootMenu = false
+	local screen = args.screen
+	local key = args.key
+	
+	
+		if (key == "local") then
+			BrowseCollectedMusic(idBinding,tParams)
+		elseif (key == "songlist") then
+		     BrowseCollectedSonglist(idBinding,tParams)
+			
+		elseif (key == "boards")	then
+		     --ProxyHelper.GetNextMediaLib(5)
+			BrowseCollectedBoards(idBinding,tParams)
+	     elseif(key == "radios") then
+			 BrowseCollectedRadios(idBinding,tParams)
+		elseif(key == nil) then
+			tListItems = g_browse_music
+			DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems)
+	     else
+			 g_selectboardsid = key
+			 BrowseBoardMusicInfos(idBinding,tParams,key)
+			
+		end
+		
+
+	
+end
+
+
+function PRX_CMD.BrowseStationsCommand(idBinding, tParams)	--二级页面浏览实现
+	local args = ParseProxyCommandArgs(tParams)
+	local tResponse = {}
+	local nextscreen
+	if(args.type == "link") then
+	
+	    nextscreen = "<NextScreen>BrowseStations</NextScreen>"
+	    DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	    g_key = args.key
+     elseif(args.type == "local") then
+	   nextscreen = "<NextScreen>BrowseLocalMusic</NextScreen>"
+	  -- GetNextMediaLib(1)
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key  
+	 elseif(args.type == "radio") then
+	   nextscreen = "<NextScreen>BrowseRadio</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+     elseif(args.type == "douban") then
+	   nextscreen = "<NextScreen>BrowseDouban</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+	 elseif(args.type == "wangyiyun") then
+	 	nextscreen = "<NextScreen>BrowseWangYiYun</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+	   
+     end
+	
+end 
+
+
+function PRX_CMD.BrowseFavoritesCommand(idBinding, tParams)--二级页面的收藏
+	local args = ParseProxyCommandArgs(tParams)	
+	local args = ParseProxyCommandArgs(tParams)
+	local tResponse = {}
+	local nextscreen
+	if(args.type == "link") then
+	
+	    nextscreen = "<NextScreen>BrowseFavorites</NextScreen>"
+	    DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	    g_key = args.key
+	elseif(args.type == "cmusic") then
+	   nextscreen = "<NextScreen>BrowseCollectedMusic</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+     elseif(args.type == "songlist") then
+	   nextscreen = "<NextScreen>BrowseCollectedSonglist</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+     elseif(args.type == "cboards") then
+	 	nextscreen = "<NextScreen>BrowseCollectedBoards</NextScreen>"
+	     DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	     g_key = args.key
+     elseif(args.type == "cradios") then
+	   nextscreen = "<NextScreen>BrowseCollectedRadios</NextScreen>"
+	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	   g_key = args.key
+     end
+end 
+ 
+function PRX_CMD.SET_VOLUME_LEVEL(idBinding,tParams)
+    local vol = tonumber(tParams.LEVEL)
+    local cmd = '{"action": "action.request.changeVolume", "volumeValue":'.. vol .."}"
+    ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.GetMyFavoritesMenu(idBinding, tParams)	--点击收藏文件夹
+	local tFavorites = getFavorites()
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tFavorites)
+  
+end
+
+function PRX_CMD.GetQueue(idBinding, tParams) --获取当前列表
+	gCurrentQueueRoomID = g_RoomID
+	
+     local data = tmpQueue
+
+     QueueChanged(5001, nil, g_RoomID, data)
+	
+end 
+
+function PRX_CMD.NowPlayingCommand(idBinding, tParams) --当前播放处选择播放歌曲
+	local args = ParseProxyCommandArgs(tParams)
+	--PrintTable(args)
+	gCurrentSongIndex = tonumber(args.Id) + 1
+	local message = '{"action": "action.request.switchMusic","musicIndex":'.. args.Id.."}"
+	ProxyHelper.SendCommand(message)
+    -- UpdateMediaInfo(5001,gNowPlaying[gCurrentSongIndex].Title,gNowPlaying[gCurrentSongIndex].fileName,gNowPlaying[gCurrentSongIndex].singer,gNowPlaying[gCurrentSongIndex].songSrc,gNowPlaying[gCurrentSongIndex].ImageUrl,g_RoomID,"secondary", "True")
+     
+end 
+
+function PRX_CMD.ToggleRepeat()  --循环
+	-- body
+	REPEAT = true
+	SHUFFLE = false
+	local message  = '{"action": "action.request.switchplaytype","playType": 0}'
+	ProxyHelper.SendCommand(message)
+end
+
+function PRX_CMD.ToggleOrder()  --循环
+	-- body
+	REPEAT = true
+	SHUFFLE = false
+	local message  = '{"action": "action.request.switchplaytype","playType": 3}'
+	ProxyHelper.SendCommand(message)
+end
+
+function PRX_CMD.ToggleShuffle() --当前播放页面的打开随机播放
+	
+	SHUFFLE = not(SHUFFLE)
+	
+	local message = '{"action": "action.request.switchplaytype","playType": 2}'
+	ProxyHelper.SendCommand(message)
+end
+
+
+function PRX_CMD.PresetCommand(idBinding, tParams) --当前播放页面的收藏按钮功能实现
+	--local args = ParseProxyCommandArgs(tParams)
+	--local key = args.key
+	
+	local message = json:encode(gNowPlaying[gCurrentSongIndex])
+	
+	message = '{"action": "action.collect.musics","infos":[' ..message .. "]}"
+	ProxyHelper.SendCommand(message)
+	--ProxyHelper.GetNextMediaLib(4)
+	
+end	
+
+
+function PRX_CMD.START_VOL_UP(idBinding, sCommand, tParams)	--长按音量键基本不要维护
+	
+    DriverHelper.VolUpTimer = DriverHelper.AddTimer(DriverHelper.VolUpTimer, 500, "MILLISECONDS", true);
+    
+end 
+
+function PRX_CMD.START_VOL_DOWN(idBinding, sCommand, tParams)
+
+    DriverHelper.VolDownTimer = DriverHelper.AddTimer(DriverHelper.VolDownTimer, 500, "MILLISECONDS", true);
+end 
+
+function PRX_CMD.STOP_VOL_UP(idBinding, sCommand, tParams)	
+	
+		DriverHelper.VolUpTimer = DriverHelper.KillTimer(DriverHelper.VolUpTimer)
+		GetCurrentVolume()
+	
+end
+
+function PRX_CMD.STOP_VOL_DOWN(idBinding, sCommand, tParams)	
+	
+	
+		DriverHelper.VolDownTimer = DriverHelper.KillTimer(DriverHelper.VolDownTimer)	
+		GetCurrentVolume()
+    
+end
+
+function PRX_CMD.PULSE_VOL_UP()
+    --local vol = gCurrentVolume + 5
+    
+    local cmd = '{"action":"action.volume.stepbychange","flag":1}'
+    ProxyHelper.SendCommand(cmd)
+    GetCurrentVolume()
+end
+function PRX_CMD.PULSE_VOL_DOWN()
+   -- local vol = gCurrentVolume - 5
+    
+    local cmd = '{"action":"action.volume.stepbychange","flag":0}'
+    ProxyHelper.SendCommand(cmd)
+    GetCurrentVolume()
+    
+end
+
+function PRX_CMD.MUTE_ON()
+    g_targevolume = gCurrentVolume
+    local cmd = '{"action": "action.request.changeVolume", "volumeValue":'.. 0 .."}"
+    ProxyHelper.SendCommand(cmd)
+    C4:SendToProxy (5002, "MUTE_CHANGED", {MUTE = true, OUTPUT = 4001})
+    C4:SendToProxy(5002, "VOLUME_LEVEL_CHANGED", {LEVEL = 0, OUTPUT = 4001})
+end
+
+function PRX_CMD.MUTE_OFF()
+    local cmd = '{"action": "action.request.changeVolume", "volumeValue":'.. g_targevolume .."}"
+    ProxyHelper.SendCommand(cmd)
+    C4:SendToProxy (5002, "MUTE_CHANGED", {MUTE = false, OUTPUT = 4001})
+    C4:SendToProxy(5002, "VOLUME_LEVEL_CHANGED", {LEVEL = g_targevolume, OUTPUT = 4001})
+end
+
+function PRX_CMD.MUTE_TOGGLE()
+    if(gCurrentVolume ~= 0) then
+	   PRX_CMD.MUTE_ON()
+    else
+	   PRX_CMD.MUTE_OFF()
+    end
+end
+
+function PRX_CMD.play(idBinding, tParams)
+    SendToProxy(5001, "SELECT_DEVICE", {ROOM_ID = tParams["ROOMID"]}, "COMMAND")
+	local args = ParseProxyCommandArgs(tParams)
+	local tResponse = {}
+	local nextscreen
+	
+    local data = json:encode(g_MediaByKey[args.key])
+    data = '{"action": "action.request.music","infos":[' ..data .. "]}"
+    ProxyHelper.SendCommand(data)
+    
+    nextscreen = "<NextScreen>#nowplaying</NextScreen>"
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+		
+end
+
+function PRX_CMD.DelColletedMusic(idBinding,tParams)
+	-- body
+	local args = ParseProxyCommandArgs(tParams)
+	local title = args.key
+	local singer = args.singer
+	local tmp = {title = title,singer = singer}
+	local message = json:encode(tmp)
+	local cmd = '{"action":"action.delete.collectedmusic","infos":[' .. message .."]}"
+	ProxyHelper.SendCommand(cmd)
+	--ProxyHelper.GetNextMediaLib(4)
+end
+
+function PRX_CMD.DelColletedRadios(idBinding,tParams)
+	-- body
+	local args = ParseProxyCommandArgs(tParams)
+	local title = args.key
+	--local singer = args.singer
+	local tmp = {title = title}
+	local message = json:encode(tmp)
+	local cmd = '{"action":"action.delete.collectedradios","info":' .. message .. "}"
+	ProxyHelper.SendCommand(cmd)
+	--ProxyHelper.GetNextMediaLib(6)
+end
+
+
+
+function PRX_CMD.DelColletedBoards()
+	local cmd = '{"action":"action.delete.collectedboards","id":'..g_selectboardsid .."}"
+	ProxyHelper.SendCommand(cmd)
+	--ProxyHelper.GetNextMediaLib(5)
+
+end
+
+function PRX_CMD.DelColletedSongList()
+    local cmd = '{"action":"action.delete.songlist","id":'..g_selectboardsid.."}"
+    ProxyHelper.SendCommand(cmd)
+   -- ProxyHelper.GetNextMediaLib(7)
+end
+
+function PRX_CMD.AddColletedBoards()
+	local cmd = '{"action":"action.collect.boards","songlistName":'..g_currentboards .."}"
+	ProxyHelper.SendCommand(cmd)
+	--ProxyHelper.GetNextMediaLib(5)
+
+end
+
+function PRX_CMD.AddToNext(idBinding,tParams)
+	-- body
+	local args = ParseProxyCommandArgs(tParams)
+	local data = json:encode(g_MediaByKey[args.key])
+	local cmd = '{"action":"action.playlist.add","flag":1,"info":' .. data .. "}"
+	ProxyHelper.SendCommand(cmd)
+	GetNowplayList()
+end
+
+function PRX_CMD.AddToQueue(idBinding,tParams)
+	-- body
+	local args = ParseProxyCommandArgs(tParams)
+	local data = json:encode(g_MediaByKey[args.key])
+	local cmd = '{"action":"action.playlist.add","flag":0,"info":' .. data .. "}"
+	ProxyHelper.SendCommand(cmd)
+	GetNowplayList() 	
+end
+
+function PRX_CMD.ReplacePlaylist(idBinding,tParams)
+	-- body
+	local args = ParseProxyCommandArgs(tParams)
+	local id = 0
+	local cmd = ""
+	if(args.listtype == "CollectedMusic") then
+		id = -1
+		cmd = '{"action":"action.play.songlist","id":'.. id ..',"musicIndex":0}'
+	
+    elseif(args.listtype == "localmusic") then
+    
+	   cmd =  '{"action":"action.play.localmusic","musicIndex":'.. args.indexID .. "}"
+    
+    else
+	    --print(g_selectboardsid)
+	    id = g_selectboardsid
+	    for k,v in pairs(g_currentlist) do
+		  if(v.title == args.key) then
+		      musicindex = k-1
+		  end
+	   end
+	    cmd = '{"action":"action.play.songlist","id":'.. id ..',"musicIndex":'..musicindex..'}'
+      end
+
+	
+	ProxyHelper.SendCommand(cmd)
+	-- SendToProxy(5001, "SELECT_DEVICE", {ROOM_ID = tParams["ROOMID"]}, "COMMAND")
+	nextscreen = "<NextScreen>#nowplaying</NextScreen>"
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
+	 
+	 
+
+end
+
+function PRX_CMD.Addtosongsheet(idBinding, tParams)
+     local args = ParseProxyCommandArgs(tParams)
+	local tResponse = {}
+	local nextscreen
+	local message = json:encode(g_MediaByKey[args.key])
+	local cmd = '{"action": "action.collect.musics","infos":[' ..message .. "]}"
+	ProxyHelper.SendCommand(cmd)
+end
+
+
+
+
+function PRX_CMD.DESTROY_NAV(idBinding, tParams)
+	local queueId = GetQueueFromRoom(nil, tParams.ROOMID) 
+	ClearNowPlayingQueue(queueId)
+end
+
+function PRX_CMD.PLAY(idBinding, tParams)	
+	local ids = "PLAY"
+	DashboardChanged( ids)
+	local cmd = '{"action": "action.request.playorpause","message": "play"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.PAUSE(idBinding, tParams)
+     print("pause is be push")
+	local ids = "PAUSE"
+	DashboardChanged(ids)
+	local cmd = '{"action": "action.request.playorpause","message": "pause"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.OFF(idBinding, tParams)
+	
+		PRX_CMD.PAUSE(5001, {ROOM_ID = g_RoomID})
+		print("Shut down player here")
+		gQueues["STATE"] = "PAUSE"
+		gCurrentSongTitle = ""
+end 
+
+
+function PRX_CMD.TransportSkipRevButton(idBinding, tParams)
+	--SKIP_REV
+	
+	local cmd = '{"action": "action.request.switchMusic","message": "before"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+
+function PRX_CMD.TransportSkipFwdButton(idBinding, tParams)
+	--SKIP_FWD
+	local cmd = '{"action": "action.request.switchMusic","message": "next"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.SKIP_REV()
+    local cmd = '{"action": "action.request.switchMusic","message": "before"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.SKIP_FWD()
+    local cmd = '{"action": "action.request.switchMusic","message": "next"}'
+	ProxyHelper.SendCommand(cmd)
+end
+
+function PRX_CMD.QUEUE_STATE_CHANGED(idBinding, tParams)
+	-- This is a notification that we receive when the queue state changed
+	local queueId = tonumber(tParams["QUEUE_ID"])
+	local state = tParams["STATE"]
+	local prevState = tParams["PREV_STATE"]
+	local prevStateTime = tonumber(tParams["PREV_STATE_TIME"])
+	local mediaId = tParams["QUEUE_INFO"]
+	
+	print("PRX_CMD.QUEUE_STATE_CHANGED() for queue " .. queueId .. ": " .. prevState .. " (" .. prevStateTime .. " seconds) -> " .. state .. " Station: " .. mediaId)	
+	
+	local queueInfo = gQueues[queueId]
+	if (queueInfo ~= nil) then
+		queueInfo["STATE"] = state
+		
+		if (prevState == "PLAY") then
+			-- Save the current time when this station stopped playing for reporting purposes
+			queueInfo["END_TIME"] = os.time()
+		end
+	end
+	
+	if (queueInfo ~= nil) then
+		ChangeDashboard(queueInfo, state)
+	end
+	
+	if ((state == "END") and (gCurrentSongIndex ~= #gNowPlaying)) then
+		gCurrentSongIndex = gCurrentSongIndex + 1
+		NowPlayingChanged(idBinding, tParams)
+	end	
+	
+end
+
+function PRX_CMD.QUEUE_DELETED(idBinding, tParams)
+	-- This is a notification that we receive when the queue gets deleted
+	local queueId = tonumber(tParams["QUEUE_ID"])
+	local lastQueueState = tParams["LAST_STATE"]
+	local lastQueueStateTime = tonumber(tParams["LAST_STATE_TIME"])
+
+	print("PRX_CMD.QUEUE_DELETED() for queue " .. queueId .. ", last state was " .. lastQueueState .. " for " .. lastQueueStateTime .. " seconds")
+	
+	local queueInfo = gQueues[queueId]
+	if (queueInfo ~= nil) then
+		print("Deleting queue info for queue " .. queueId .. ", was playing QUEUE_INFO " .. tParams["QUEUE_INFO"])
+		
+		ChangeDashboard(queueInfo, nil) -- Clear the media dashboard
+		
+		if (lastQueueState == "PLAY") then
+			-- Save the current time when this station stopped playing for reporting purposes
+			queueInfo["END_TIME"] = os.time()
+		end
+		
+		gQueues[queueId] = nil
+		queueInfo = nil
+		
+		ClearNowPlayingQueue(queueId)
+	end
+	
+end
+
+function PRX_CMD.QUEUE_MEDIA_INFO_UPDATED(idBinding, tParams)
+    --print("22222222222222222222222222222")
+end
+
+function PRX_CMD.GetDashboard(idBinding, tParams)
+	-- This is called when navigators want to know the dashboard controls to be displayed.
+	if (gQueues.STATE ~= nil) then
+		DashboardChanged(gQueues["STATE"])
+	else
+		DashboardChanged("")
+	end
+end
+
+function PRX_CMD.GetSettings(idBinding, tParams)
+	print("PRX_CMD.GetSettings(" .. idBinding .. ", " .. tParams.SEQ .. ") for nav " .. tParams.NAVID)
+	local settings = {}
+	settings.IP = g_ServerIPAddress
+	settings.Status = Properties["Connection Status"]
+	settings.scan = Properties["Scan Progress"]
+	local data = BuildSimpleXml("Settings", settings, true)
+	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], data)	
+	
+end
+
+
+
+function PRX_CMD.SettingChanged(idBinding, tParams)
+	local args = ParseProxyCommandArgs(tParams)
+	print("PRX_CMD.SettingChanged (" .. idBinding .. ", " .. tParams.SEQ .. ") for nav " .. tParams.NAVID)
+	if(args.PropertyName == "ToggleButton") then
+	   if(args.Value == "on") then
+		  print("turn on aux")
+		  local cmd = '{"action":"action.aux.switch","openAux":true}'
+		  ProxyHelper.SendCommand(cmd)
+	   else
+		  print("turn off aux")
+		  local cmd = '{"action":"action.aux.switch","openAux":false}'
+		  ProxyHelper.SendCommand(cmd)
+	   end
+    elseif(args.PropertyName == "CheckBox") then
+	   if(args.Value == "on") then
+		  print("turn on blue")
+		  local cmd = '{"action":"action.bluetooth.switch","openBluetooth":true}'
+		  ProxyHelper.SendCommand(cmd)
+	   else
+		  print("turn off blue")
+		  local cmd = '{"action":"action.bluetooth.switch","openBluetooth":false}'
+		  ProxyHelper.SendCommand(cmd)
+	   end
+	   
+    elseif(args.PropertyName == "SPDIF") then
+
+		  if(args.Value == "on") then
+		      local cmd = '{"action":"action.spdif.switch","openSpdif":true}'
+			 ProxyHelper.SendCommand(cmd)
+		  else
+		      local cmd = '{"action":"action.spdif.switch","openSpdif":false}'
+			 ProxyHelper.SendCommand(cmd)
+	       end
+    end
+end
+
+function PRX_CMD.SubmitButtonCommand(idBinding, tParams)
+	--local message = table.concat(out_table, "\n")
+	local tArgs = {}
+	tArgs["Id"] = "SettingsNotification"
+	tArgs["Title"] = "正在扫描媒体库"
+	tArgs["Message"] = "正在扫描媒体库，大约需要五分钟，请稍等。。。。"
+	tParams["EVTARGS"] = BuildSimpleXml(nil, tArgs, true)
+	tParams["NAME"] = "DriverNotification"
+	SendToProxy(idBinding, "SEND_EVENT", tParams, "COMMAND")	
+	ProxyHelper.Scan()
+	
+end
+
+function PRX_CMD.localScan(idBinding, tParams)
+	--local message = table.concat(out_table, "\n")
+	ProxyHelper.GetNextMediaLib(1)
+	
+end
+
+
+--- Audio cmd
+function PRX_CMD.SET_INPUT(idBinding, tParams)	
+	C4:SendToProxy(5002, "INPUT_OUTPUT_CHANGED", {INPUT = tParams.INPUT, OUTPUT = tParams.OUTPUT})
+end 
+
+function PRX_CMD.DISCONNECT_OUTPUT(idBinding, tParams)
+	C4:SendToProxy(5002, "INPUT_OUTPUT_CHANGED", {INPUT = -1, OUTPUT = tParams.OUTPUT})
+end 
+
+
+function PRX_CMD.BINDING_CHANGE_ACTION(idBinding, tParams)
+	local id = tonumber(tParams.BINDING_ID)
+	local flag = tParams.IS_BOUND
+	if (id == 7001) then			--Room connection id
+		if (flag) then
+			local room = C4:GetBoundConsumerDevices(C4:GetDeviceID()+2, 7001)
+			if (room ~= nil) then
+				for k, v in pairs(room) do
+					print(v.." with id "..k)
+					C4:RegisterVariableListener(k, 1031)
+					g_RoomID = k
+				end
+			end
+		end
+	end
+end
+
+function PRX_CMD.GET_AUDIO_PATH(idBinding,tParams)
+    for k,v in pairs(tParams) do
+	   print(k,v)
+    end
+end
+
+function PRX_CMD.GET_AUDIO_DEVICES(idBinding,tParams)
+    print("GETAUDIODEVICE:")
+    for k,v in pairs(tParams) do
+	   print(k,v)
+    end
+end
+
+
+function PRX_CMD.SELECT_SOURCE(idBinding,tParams)
+    
+end end)
+
+
+require "cmd"    --对外和协议内命令实现
+require "feedback"   --数据反馈处理
+require "parsemessage"   --对数据解析
+require "action"    --方法实现
+require "commands"  --编程调用
+--------------------data process-------------------------
+----------------------------------------------------------
+json = require("json")
+-- Constants
+DEFAULT_PROXY_BINDINGID = 5001     
+GENERIC_MEDIA_PROXY_BINDING_ID = 5001
+
+--image path
+gControllerIPAddress = C4:GetControllerNetworkAddress()
+gMediaPath = "http://" .. gControllerIPAddress .. "/driver/MiYue/media/"
+
+
+DriverHelper = {}
+
+g_MediaByKey = {}
+g_boardMusicInfo = {}
+
+gQueues = {}          	-- Audio queue information of any queues that this driver created or plays audio in
+gNowPlaying = {}		-- Now playing information for any queues that this driver created or plays audio in
+gCurrentSongIndex = 1
+
+
+g_LocalMusic = {}
+g_CollectedBoards = {}
+g_CollectedRadios = {}
+g_songlist = {}
+
+gScan = false
+DEBUGMODE = false
+
+gCurrentSongTitle = ""
+gConnectStatus = "OFFLINE"
+
+--g_ServerIPAddress = Properties["IP Address"]
+	   
+g_DriverVersion = "V1.02"
+--数据解析
+
+
+function ProxyHelper.GetNextMediaLib(seq)	
+	-- body
+	local lib = {"localmusic","raido","wangyiyun","douban","collectedMusic","collectedBoards","collectedRadios","collectedSonglist"}
+
+	local msg_id = {'{"action":"action.request.getlocalMusic"}','{"action":"action.request.getradioInfo"}',
+	                '{"action":"action.request.getwangyiboards"}','{"action":"action.douban.getdirinfos"}',
+				 '{"action":"action.request.collectedMusic"}','{"action":"action.request.collectedBoards"}',
+				 '{"action":"action.request.collectedRadios"}',
+	                '{"action":"action.request.collectedSonglist"}'}
+	if (lib[seq]) then							--first, request media lib accordingly
+		--print("Start to request " ..lib[seq])
+		local cmd = msg_id[seq]
+		ProxyHelper.AddCommandList(cmd)
+	end
+	
+end
+
+
+function ReceivedFromNetwork(idBinding, nPort, strData)
+	if (strData == nil) then return end
+	ProxyHelper.TCPReceiveBuf = ProxyHelper.TCPReceiveBuf .. strData
+	if (string.sub(ProxyHelper.TCPReceiveBuf,-4) ~= "\n\v\f\r") then
+		--print("Incomplete message received ...")
+		return	  
+	else
+		--print("Begin to process message received...")
+		--
+		ProxyHelper.TCPReceiveBuf = string.gsub(ProxyHelper.TCPReceiveBuf,"\n\v\f\r","")
+		local tmp = json:decode(ProxyHelper.TCPReceiveBuf)
+		ParseFeedback(ProxyHelper.TCPReceiveBuf)
+	end		
+end
+
+function dbg(str) 
+    if(DEBUGMODE) then
+       print(str)
+    end
+end
+
+
+
+--------------------UI CONFIGURE----------------------------
+
+
+
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+-- Driver Declarations
+--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+--[[
+	Command Handler Tables
+--]]
+
+--require "driver"
+--require "data"
+
+
+
+g_browse_mainmenu = {
+	{type = "local", folder = "true", text = "本机", URL = "", key = "local", ImageUrl = gMediaPath .. "ico_tunein_music.png"},
+	{type = "link", folder = "true", text = "电台", URL = "", key = "radio", ImageUrl = gMediaPath .."ico_tunein_news.png"},
+	{type = "link", folder = "true", text = "网易云", URL = "", key = "wangyi", ImageUrl = gMediaPath .."ico_tunein_trending.png"},
+	{type = "link", folder = "true", text = "豆瓣FM", URL = "", key = "douban", ImageUrl = gMediaPath .."ico_tunein_trending.png"},
+}
+
+g_browse_music = {
+	{text="收藏列表", is_header="true"},
+	{type = "cmusic", folder = "true", text = "歌曲", subtext = "", URL = "", key = "local" ,ImageUrl = gMediaPath .. "ico_tunein_music.png"},
+	{type = "link", folder = "true", text = "歌单", subtext = "", URL = "", key = "songlist",ImageUrl = gMediaPath .. "act_icotab_preset_dn.png"},
+	{type = "link", folder = "true", text = "榜单", subtext = "", URL = "", key = "boards",ImageUrl = gMediaPath .. "ico_tunein_trending.png"},
+	{type = "cradios", folder = "true", text = "电台", subtext = "", URL = "", key = "radios",ImageUrl = gMediaPath .. "ico_tunein_podcast.png"},	
+}
+
+
+
+-- http://lua-users.org/wiki/StringRecipes
+function url_encode(str)
+  if (str) then
+    str = string.gsub (str, "\n", "\r\n")
+    str = string.gsub (str, "([^%w ])",
+        function (c) return string.format ("%%%02X", string.byte(c)) end)
+    str = string.gsub (str, " ", "%%20")
+  end
+  return str	
+end
+
+
+---------------------------------------------------------------------
+-- ReceivedFromProxy Code
+---------------------------------------------------------------------
+--[[
+	ReceivedFromProxy(idBinding, sCommand, tParams)
+		Function called by Director when a proxy bound to the specified binding sends a
+		BindMessage to the DriverWorks driver.
+
+	Parameters
+		idBinding
+			Binding ID of the proxy that sent a BindMessage to the DriverWorks driver.
+		sCommand
+			Command that was sent
+		tParams
+			Lua table of received command parameters
+--]]
+function ReceivedFromProxy(idBinding, sCommand, tParams)
+	if (sCommand ~= nil) then
+		if(tParams == nil)		-- initial table variable if nil
+			then tParams = {}
+		end
+		dbg("ReceivedFromProxy(): " .. sCommand .. " on binding " .. idBinding .. "; Call Function " .. sCommand .. "()")
+		PrintTable(tParams, "     ")
+		if (PRX_CMD[sCommand]) ~= nil then
+			PRX_CMD[sCommand](idBinding, tParams)
+		else
+			print("ReceivedFromProxy: Unhandled command = " .. sCommand)
+		end
+	end
+end
+
+function ParseProxyCommandArgs(tParams)
+	local args = {}
+	local parsedArgs = C4:ParseXml(tParams["ARGS"])
+	for i,v in pairs(parsedArgs.ChildNodes) do
+		args[v.Attributes["name"]] = v.Value
+	end
+	return args
+	
+end
+
+
+
+---------------------------------------------------------------------
+-- Proxy Functions
+---------------------------------------------------------------------
+
+
+
+function ClearNowPlayingQueue(queueId)
+	print("ClearNowPlayingQueue .........")
+	--gNowPlaying = {}	
+	gCurrentSongTitle = ""
+	-- Update all navigators that care
+	--SendQueueChangedEvent(queueId, gNowPlaying)
+end
+
+function UpdateVolume(vol)
+    local level = vol
+    C4:SendToProxy(5002, "VOLUME_LEVEL_CHANGED", {LEVEL = level, OUTPUT = 4001})
+   -- print("vol is " .. level)
+    if(vol > 0) then
+	   C4:SendToProxy (5002, "MUTE_CHANGED", {MUTE = false, OUTPUT = 4001})
+    elseif(vol == 0) then
+	   C4:SendToProxy (5002, "MUTE_CHANGED", {MUTE = true, OUTPUT = 4001})
+    end
+end
+
+--BrowseMusicCollection Action Command
+
+
+---------------------------------------------------------------------
+-- Notification Functions
+---------------------------------------------------------------------
+function SendToProxy(idBinding, strCommand, tParams, strCallType, bAllowEmptyValues)
+	dbg("SendToProxy (" .. idBinding .. ", " .. strCommand .. ")")
+	--PrintTable(tParams, "     ")
+	if (strCallType ~= nil) then
+		if (bAllowEmptyValues ~= nil) then
+			C4:SendToProxy(idBinding, strCommand, tParams, strCallType, bAllowEmptyValues)
+		else
+			C4:SendToProxy(idBinding, strCommand, tParams, strCallType)
+		end
+	else
+		if (bAllowEmptyValues ~= nil) then
+			C4:SendToProxy(idBinding, strCommand, tParams, bAllowEmptyValues)
+		else
+			C4:SendToProxy(idBinding, strCommand, tParams)
+		end
+	end
+end
+
+function SendEvent(idBinding, navId, tRooms, name, tArgs)
+	-- This function must have a registered navigator event set up
+	local tParams = {}
+	if (navId ~= nil) then
+		tParams["NAVID"] = navId
+		--dbg("SendEvent " .. name .. " to navigator " .. navId)
+	elseif (tRooms ~= nil) then
+		local rooms = ""
+		for i,v in pairs(tRooms) do
+			if (string.len(rooms) > 0) then
+				rooms = rooms .. ","
+			end
+			rooms = rooms .. tostring(v)
+		end
+		
+		if (string.len(rooms) > 0) then
+			tParams["ROOMS"] = rooms
+		end
+		--dbg("SendEvent " .. name .. " to navigators in rooms " .. rooms)
+	else
+		--dbg("SendEvent " .. name .. " to all navigators (broadcast)")
+	end
+	tParams["NAME"] = name
+	tParams["EVTARGS"] = BuildListXml(tArgs, true)
+	SendToProxy(idBinding, "SEND_EVENT", tParams, "COMMAND")
+end
+
+function BroadcastEvent(idBinding, name, tArgs)
+	local tParams = {}
+	tParams["NAME"] = name
+	tParams["EVTARGS"] = BuildSimpleXml(nil, tArgs, true)
+	SendToProxy(idBinding, "SEND_EVENT", tParams, "COMMAND")	
+	
+end
+
+function SendQueueChangedEvent(queueId, tArgs)
+	print("SendQueueChangedEvent(" .. queueId .. ")")
+	local tRooms = GetRoomsByQueue(nil, queueId)
+	if (tRooms ~= nil) then
+		SendEvent(GENERIC_MEDIA_PROXY_BINDING_ID, nil, tRooms, "QueueChanged", tArgs)
+	end
+end
+---------------------------------------------------------------------
+-- Helper Functions
+---------------------------------------------------------------------
+function getFavorites()
+	local t = {}
+	for i,v in pairs(g_MediaByKey) do
+		if (v.is_preset == "true")  then
+			table.insert(t, v) 
+		end
+	end
+	return t
+end
+
+function BuildSimpleXml(tag, tData, escapeValue)
+	local xml = ""
+	
+	if (tag ~= nil) then
+		xml = "<" .. tag .. ">"
+	end
+	
+	if (escapeValue) then
+		for i,v in pairs(tData) do
+			xml = xml .. "<" .. i .. ">" .. C4:XmlEscapeString(v) .. "</" .. i .. ">"
+		end
+	else
+		for i,v in pairs(tData) do
+			xml = xml .. "<" .. i .. ">" .. v .. "</" .. i .. ">"
+		end
+	end
+	
+	if (tag ~= nil) then
+		xml = xml .. "</" .. tag .. ">"
+	end
+	return xml
+end
+
+
+function XMLEncode (s)
+	if (s == nil) then return end
+
+	s = string.gsub (s, '&', '\&amp\;')
+	s = string.gsub (s, '"', '\&quot\;')
+	s = string.gsub (s, '<', '\&lt\;')
+	s = string.gsub (s, '>', '\&gt\;')
+	s = string.gsub (s, "'", '\&apos\;')
+
+	return s
+end
+
+function XMLTag (strName, tParams, tagSubTables, xmlEncodeElements)
+	local retXML = {}
+	if (type (strName) == 'table' and tParams == nil) then
+		tParams = strName
+		strName = nil
+	end
+	if (strName) then
+		table.insert (retXML, '<')
+		table.insert (retXML, tostring (strName))
+		table.insert (retXML, '>')
+	end
+	if (type (tParams) == 'table') then
+		for k, v in pairs (tParams) do
+			if (v == nil) then v = '' end
+			if (type (v) == 'table') then
+				if (k == 'image_list') then
+					for _, image_list in pairs (v) do
+						table.insert (retXML, image_list)
+					end
+				elseif (tagSubTables == true) then
+					table.insert (retXML, XMLTag (k, v))
+				end
+			else
+				if (v == nil) then v = '' end
+				table.insert (retXML, '<')
+				table.insert (retXML, tostring (k))
+				table.insert (retXML, '>')
+				if (xmlEncodeElements ~= false) then
+					table.insert (retXML, XMLEncode (tostring (v)))
+				else
+					table.insert (retXML, tostring (v))
+				end
+				table.insert (retXML, '</')
+				table.insert (retXML, string.match (tostring (k), '^(%S+)'))
+				table.insert (retXML, '>')
+			end
+		end
+	elseif (tParams) then
+		if (xmlEncodeElements ~= false) then
+			table.insert (retXML, XMLEncode (tostring (tParams)))
+		else
+			table.insert (retXML, tostring (tParams))
+		end
+
+	end
+	if (strName) then
+		table.insert (retXML, '</')
+		table.insert (retXML, string.match (tostring (strName), '^(%S+)'))
+		table.insert (retXML, '>')
+	end
+	return (table.concat (retXML))
+end
+
+function BuildListXml(tData, escapeValue)
+--print("BuildListXml, tData:")
+--PrintTable(tData, "     ")
+	local xml = ""
+
+	xml = "<List>"
+
+	if (escapeValue) then
+		for j,k in pairs(tData) do
+			xml = xml .. "<item>"
+			for i,v in pairs(k) do
+				xml = xml .. "<" .. i .. ">" .. C4:XmlEscapeString(v) .. "</" .. i .. ">"
+			end	
+			xml = xml .. "</item>"
+		end	
+	else
+		for j,k in pairs(tData) do
+			xml = xml .. "<item>"
+			for i,v in pairs(k) do
+				xml = xml .. "<" .. i .. ">" .. v .. "</" .. i .. ">"
+			end	
+			xml = xml .. "</item>"
+		end
+	end
+	
+	xml = xml .. "</List>"
+	
+	return xml
+end
+
+function DataReceivedError(idBinding, navId, seq, msg)
+	local tResponse = {}
+	tResponse["NAVID"] = navId
+	tResponse["SEQ"] = seq
+	tResponse["DATA"] = ""
+	tResponse["ERROR"] = msg
+	SendToProxy(idBinding, "DATA_RECEIVED", tResponse)
+end
+
+function DataReceived(idBinding, navId, seq, response)
+	local data 
+	if (type(response) == "table") then
+		data = BuildListXml(response, true)
+	else	
+		data = response
+	end
+	
+	local tResponse = {
+		["NAVID"] = navId,
+		["SEQ"] = seq,
+		["DATA"] = data,
+	}
+	SendToProxy(idBinding, "DATA_RECEIVED", tResponse)	
+end
+
+function UpdateMediaInfo(idBinding, line1, line2, line3, line4, url, roomId, mediatype, merge)
+	   if(url ~= nil) then
+		tResponse = {
+			["LINE1"] =  line1,
+			["LINE2"] =  line2,
+			["LINE3"] =  line3,
+			["LINE4"] =  line4, 
+			["IMAGEURL"] = C4:Base64Encode(url),
+			["ROOMID"] = roomId,
+			["MEDIATYPE"] = mediatype,
+			["MERGE"] = merge,
+		}	
+		
+	   else
+		  tResponse = {
+			["LINE1"] =  line1,
+			["LINE2"] =  line2,
+			["LINE3"] =  line3,
+			["LINE4"] =  line4, 
+			["IMAGEURL"] = C4:Base64Encode(gMediaPath .. "ico_tunein_music.png"),
+			["ROOMID"] = roomId,
+			["MEDIATYPE"] = mediatype,
+			["MERGE"] = merge,
+		}	
+	   end
+		
+		SendToProxy(idBinding, "UPDATE_MEDIA_INFO", tResponse, "COMMAND", true)
+		C4:SendToDevice(roomId, "SELECT_AUDIO_DEVICE", {deviceid = 1+C4:GetDeviceID()});   --发送刷新导航左下方的当前播放信息
+			
+end
+
+
+function QueueChanged(idBinding, navId, roomId, args)
+     
+	local tResponse = {}
+	
+	tResponse["NAME"] = "QueueChanged"
+	tResponse["EVTARGS"] = args
+
+	SendToProxy(idBinding, "SEND_EVENT", tResponse, "COMMAND")	
+end
+	  
+function PrintTable(tValue, sIndent)
+	sIndent = sIndent or "   "
+	for k,v in pairs(tValue) do
+		dbg(sIndent .. tostring(k) .. ":  " .. tostring(v))
+		if (type(v) == "table") then
+			PrintTable(v, sIndent .. "   ")
+		end
+	end
+end
+
+---------------------------------------------------------------------
+-- Timer Handling
+---------------------------------------------------------------------
+function OnTimerExpired(idTimer)
+	if (idTimer == g_DirectorInitializedTimer) then
+		DirectorInitialized()
+		g_DirectorInitializedTimer = C4:KillTimer(idTimer)
+     elseif(idTimer == DriverHelper.VolUpTimer) then
+			local cmd = '{"action":"action.volume.stepbychange","flag":1}'
+			ProxyHelper.SendCommand(cmd)
+     elseif(idTimer == DriverHelper.VolDownTimer) then
+	     local cmd = '{"action":"action.volume.stepbychange","flag":0}'
+	     ProxyHelper.SendCommand(cmd)
+     elseif(idTimer == DriverHelper.UpdateMediaInfo) then
+	   g_LocalMusic = ProxyHelper.ReadInfo("localmusic")
+	   g_CollectedBoards = ProxyHelper.ReadInfo("CollectedBoards")
+	   g_CollectedRadios = ProxyHelper.ReadInfo("CollectedRadios")
+	   g_songlist = ProxyHelper.ReadInfo("songlist")
+	   build_MediaByKeyTable(g_CollectedRadios)
+	   build_MediaByKeyTable(g_LocalMusic)
+     elseif(idTimer == DriverHelper.Reconnect) then
+	   		--if(gConnectStatus == "OFFLINE") then
+	   			--ProxyHelper.ConnectServer()
+	   		--end
+	   
+     elseif(idTimer == DriverHelper.CheckScan ) then
+		  if(gCurrentScan == 8) then
+			 gCurrentScan = 0
+			 DriverHelper.CheckScan = DriverHelper.KillTimer(DriverHelper.CheckScan)
+		  elseif(gCurrentScan <8) then
+			 ProxyHelper.GetNextMediaLib(gCurrentScan)	
+		  end
+		
+	else
+		print('DESTROYING STRAY TIMER: ' .. idTimer)
+		C4:KillTimer(idTimer)
+	end
+end
+
+function DriverHelper.AddTimer(timer, count, units, recur)
+	local newTimer
+	if (recur == nil) then recur = false end
+	if (timer and timer ~= 0) then DriverHelper.KillTimer (timer) end
+
+	newTimer = C4:AddTimer (count, units, recur)
+	return newTimer
+end
+
+function DriverHelper.KillAllTimers()
+	for k,v in pairs (DriverHelper or {}) do
+		if (type (v) == 'number') then
+			DriverHelper[k] = DriverHelper.KillTimer (DriverHelper[k])
+		end
+	end
+end
+
+function DriverHelper.KillTimer(timer)
+	if (timer and type (timer) == 'number') then
+		return (C4:KillTimer (timer))
+	else
+		return (0)
+	end
+end
+
+---------------------------------------------------------------------
+-- Now Playing
+---------------------------------------------------------------------
+
+function GetNodesByPath(xml, path)
+	-- This function returns all nodes matching this path
+	local ret = {}
+	if (xml.ChildNodes ~= nil) then
+		local found = string.find(path, "/", 1, true)
+		if (found ~= nil) then
+			local name = string.sub(path, 1, found - 1)
+			for i,v in pairs(xml.ChildNodes) do
+				local node = v
+				if (node.Name == name) then
+					local nodes = GetNodesByPath(node, string.sub(path, found + 1))
+					if (nodes ~= nil) then
+						for j,w in pairs(nodes) do
+							table.insert(ret, w)
+						end
+					end
+				end
+			end
+		else
+			for i,v in pairs(xml.ChildNodes) do
+				if (v.Name == path) then
+					table.insert(ret, v)
+				end
+			end
+		end
+	end
+	return ret
+end
+
+function GetNodeValueByPath(xml, path)
+	-- This function assumes that only one node with the path exists and returns its value
+	for i,v in pairs(GetNodesByPath(xml, path)) do
+		return v.Value
+	end
+end
+
+function GetNodesValuesByPath(xml, path)
+	-- This function returns all values of all nodes with this path
+	local ret = {}
+	for i,v in pairs(GetNodesByPath(xml, path)) do
+		table.insert(ret, v.Value)
+	end
+	return ret
+end
+
+function GetQueueFromRoom(map, roomId)
+	roomId = tostring(roomId)
+	-- This function queries digital audio for the room/queue map to figure out what
+	-- queue id is used by a room
+	--print("map::"..map)
+	if (map == nil) then
+		map = g_roomMapInfo
+	end
+	if (map ~= nil) and (map ~= "") then
+		local info = C4:ParseXml(map)
+		if (info ~= nil) then
+			for i,v in pairs(GetNodesByPath(info, "audioQueueInfo/queue")) do	
+				local queueId = tonumber(GetNodeValueByPath(v, "id"))		
+				for j,w in pairs(GetNodesValuesByPath(v, "rooms/id")) do		
+					if (w == roomId) then				
+						return queueId
+					end
+				end
+			end
+		end
+	end
+	
+	return 0
+end
+
+function GetRoomsByQueue(map, queueId)
+	-- This function returns an array of room ids in a given queue
+	if (map == nil) then
+		map = g_roomMapInfo
+	end
+	
+	if (map ~= nil) and (string.len(map) > 0) then
+	     print(map)
+		local info = C4:ParseXml(map)
+		if (info ~= nil) then
+			for i,v in pairs(GetNodesByPath(info, "audioQueueInfo/queue")) do
+				local id = tonumber(GetNodeValueByPath(v, "id"))
+				if (id == queueId) then
+					local rooms = {}
+					for j,w in pairs(GetNodesValuesByPath(v, "rooms/id")) do
+						table.insert(rooms, w)
+					end
+					return rooms
+				end
+			end
+		end
+	end
+end
+
+function DashboardChanged(state)
+	local ids = nil
+	if (state == "PLAY") then
+		ids = "SkipRev Pause SkipFwd"
+	elseif ((state == "PAUSE") or (state == "STOP")) then
+		ids = "SkipRev Play SkipFwd"
+	elseif (state == "END") then
+		ids = "SkipRev Pause SkipFwd"		
+	else
+		ids = ""
+	end
+	local args = {}
+	args["Items"] = ids
+	BroadcastEvent(GENERIC_MEDIA_PROXY_BINDING_ID, "DashboardChanged", args)
+end
+
+function ChangeDashboard(queueInfo, newState)
+	local dashboard = GetDashboardByState(newState)
+end
+
+function GetDashboardByState(state)
+	if (state == "PLAY") then
+		return "SkipRev Pause SkipFwd"
+	elseif ((state == "PAUSE") or (state == "STOP")) then
+		return "SkipRev Play SkipFwd"
+	elseif (state == "END") then
+		return "SkipRev Pause SkipFwd"		
+	else
+		return ""
+	end
+end
+
+---------------------------------------------------------------------
+-- Property Handling
+---------------------------------------------------------------------
+function OnPropertyChanged(strProperty)
+	dbg("OnPropertyChanged(" .. strProperty .. ") changed to: " .. Properties[strProperty])
+	local propVal = Properties[strProperty]
+	 if(strProperty == "Debug Mode") then
+	   DEBUGMODE = (propVal == "true")
+	   
+	   C4:AllowExecute(DEBUGMODE)
+     end
+	
+end
+
+---------------------------------------------------------------------
+-- Room Mapping
+---------------------------------------------------------------------
+g_roomMapInfo = nil
+function OnWatchedVariableChanged(idDevice, idVariable, strValue)
+	dbg("idDevice: "..idDevice.." idVariable: "..idVariable.." strValue: "..strValue)
+	if ((idDevice == 100002) and (idVariable == 1031)) then
+		-- Update the room map
+		local oldMap = g_roomMapInfo
+		g_roomMapInfo = strValue
+		--local _, _,g_queueId = string.find(g_roomMapInfo, "<id>(.-)</id>");
+		--Navigator:OnUpdatedRoomMapInfo(oldMap, strValue)
+	elseif (idVariable == 1031 and idDevice == g_RoomID) then
+			  local _, _, deviceID = string.find(strValue, "<deviceid>(.-)</deviceid>")
+			  deviceID = tonumber(deviceID)
+			  if(deviceID == 100002) then
+				  	print("CONTROL4 DIGITAL MUSIC IS SELECTED")
+				  	--local cmd = '{"action":"action.aux.switch","openAux":true}'
+				  	--ProxyHelper.SendCommand(cmd)
+			  elseif(deviceID == C4:GetDeviceID()+1) then	
+				  	print("device music is SELECTED")
+				  	--local cmd = '{"action":"action.aux.switch","openAux":false}'
+				  	--ProxyHelper.SendCommand(cmd)
+			  end
+	end
+end
+
+
+
+--------------------UI END----------------------------------
+
+
+------------------- Initialization ---------------------
+function OnDriverInit()
+	-- room uses the proxy for lookups - use the proxy device id for items
+	local proxyDev = C4:GetProxyDevices()
+	if (proxyDev) then
+		C4:MediaSetDeviceContext(proxyDev)
+	end
+
+    
+end	
+
+
+function OnDriverUpdate()
+	-- room uses the proxy for lookups - use the proxy device id for items
+	local proxyDev = C4:GetProxyDevices()
+	if (proxyDev) then
+		C4:MediaSetDeviceContext(proxyDev)
+	end
+	OnPropertyChanged("IP Address")
+end	
+
+
+function OnDriverLateInit()
+    --ProxyHelper.ConnectServer()
+     g_LocalMusic = ProxyHelper.ReadInfo("localmusic")
+	g_CollectedBoards = ProxyHelper.ReadInfo("CollectedBoards")
+	g_CollectedRadios = ProxyHelper.ReadInfo("CollectedRadios")
+	g_songlist = ProxyHelper.ReadInfo("songlist")
+	build_MediaByKeyTable(g_CollectedRadios)
+	build_MediaByKeyTable(g_LocalMusic)
+	C4:UpdateProperty("Driver Version",g_DriverVersion)
+	
+end
+
+function OnDriverRemovedFromproject()
+    C4:DestroyServer()
+end
+
+for k,v in pairs(Properties) do
+	OnPropertyChanged(k)
+end
+
+function DirectorInitialized()
+	local room = C4:GetBoundConsumerDevices(C4:GetDeviceID()+2, 7001)
+			if (room ~= nil) then
+				for k, v in pairs(room) do
+					print(v.." with id "..k)
+					C4:RegisterVariableListener(k, 1031)
+					g_RoomID = k
+				end
+			end
+	g_roomMapInfo = C4:GetVariable(100002, 1009)
+	C4:RegisterVariableListener(100002, 1009) 
+	--C4:RegisterVariableListener(100002, 1009) -- Watch digital audio's room map variable
+end
+g_DirectorInitializedTimer = C4:AddTimer(20, "MILLISECONDS") -- Fire as soon as possible
+SendCommandTimer = C4:SetTimer(4000, function(timer, skips) ProxyHelper.SendCommandList() end, true)
+
+

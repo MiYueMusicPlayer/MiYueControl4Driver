@@ -1,0 +1,2086 @@
+<devicedata>
+  <copyright>Copyright 2013 Control4 Corporation.  All rights reserved.</copyright>
+  <creator>Control4</creator>
+  <manufacturer>Control4 </manufacturer>
+  <name>MIYUE Media Service </name>
+  <model>MUSIC PLAYER</model>
+  <created>06/01/2019 12:47 PM</created>
+  <modified>06/01/2019 12:47 PM</modified>
+  <version>101</version>
+  <small>devices_sm\c4.gif</small>
+  <large>devices_lg\c4.gif</large>
+  <control>lua_gen</control>
+  <controlmethod>ip</controlmethod>
+  <driver>DriverWorks</driver>
+  <composer_categories>
+    <category>Audio/Video</category>
+  </composer_categories>
+  <proxies qty="2">
+    <proxy proxybindingid="5001" name="MiYue">media_service</proxy>
+    <proxy proxybindingid="5002" name="miyue">amplifier</proxy>
+  </proxies>
+  <capabilities>
+    <allow_as_path_source>True</allow_as_path_source>
+    <media_type>2</media_type>
+    <has_audio>True</has_audio>
+    <audio_consumer_count>1</audio_consumer_count>
+    <audio_provider_count>1</audio_provider_count>
+    <has_discrete_volume_control>True</has_discrete_volume_control>
+    <has_up_down_volume_control>True</has_up_down_volume_control>
+    <has_discrete_mute_control>True</has_discrete_mute_control>
+    <has_toggle_mute_control>True</has_toggle_mute_control>
+    <has_discrete_input_select>True</has_discrete_input_select>
+    <has_toad_input_select>False</has_toad_input_select>
+    <has_discrete_bass_control>False</has_discrete_bass_control>
+    <has_discrete_treble_control>False</has_discrete_treble_control>
+    <has_up_down_bass_control>False</has_up_down_bass_control>
+    <has_up_down_treble_control>False</has_up_down_treble_control>
+    <has_video>False</has_video>
+    <has_video_signal_sense>False</has_video_signal_sense>
+    <video_consumer_count>0</video_consumer_count>
+    <video_provider_count>0</video_provider_count>
+    <can_upclass>True</can_upclass>
+    <can_downclass>True</can_downclass>
+    <hide_in_media>True</hide_in_media>
+    <digital_audio_support>False</digital_audio_support>
+    <can_scan_media>False</can_scan_media>
+    <ui_selects_device>True</ui_selects_device>
+    <hide_in_list_nav>false</hide_in_list_nav>
+    <list_nav_page_size>1000</list_nav_page_size>
+    <navigator_display_option proxybindingid="5001">
+      <translation_url>controller://driver/MiYue/translations</translation_url>
+    </navigator_display_option>
+    <UI proxybindingid="5001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <BrandingIcon>Branding</BrandingIcon>
+      <DeviceIcon>Device</DeviceIcon>
+      <Icons>
+        <!-- The icon names and sizes will change -->
+        <IconGroup id="Device">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_device.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/30x30/ico_device.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/40x40/ico_device.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_device.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_device.png</Icon>
+          <Icon width="56" height="56">controller://driver/MiYue/icons/56x56/ico_device.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_device.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_device.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/70x70/ico_device.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/80x80/ico_device.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_device.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_device.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_device.png</Icon>
+          <Icon width="143" height="143">controller://driver/MiYue/icons/143x143/ico_device.png</Icon>
+          <Icon width="183" height="183">controller://driver/MiYue/icons/183x183/ico_device.png</Icon>
+        </IconGroup>
+        <IconGroup id="Branding">
+          <Icon width="20" height="20">controller://driver/MiYue/icons/device/device_20.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/device/device_30.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/device/device_40.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/device/device_50.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/device/device_60.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/device/device_70.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/device/device_80.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/device/device_90.png</Icon>
+          <Icon width="100" height="100">controller://driver/MiYue/icons/device/device_100.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/device/device_110.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/device/device_120.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/device/device_130.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/device/device_140.png</Icon>
+          <Icon width="183" height="183">controller://driver/MiYue/icons/183x183/ico_device.png</Icon>
+        </IconGroup>
+        <IconGroup id="MyFavorites">
+          <Icon width="30" height="30">controller://driver/MiYue/icons/30x30/act_icotab_preset_up.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/act_icotab_preset_up.png</Icon>
+          <Icon width="116" height="55">controller://driver/MiYue/icons/116x55/act_icotab_preset_up.png</Icon>
+        </IconGroup>
+        <IconGroup id="Browse">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/act_icotab_browse_up.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/act_icotab_browse_up.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/act_icotab_browse_up.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/act_icotab_browse_up.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/act_icotab_browse_up.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/act_icotab_browse_up.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/act_icotab_browse_up.png</Icon>
+          <Icon width="116" height="55">controller://driver/MiYue/icons/116x55/act_icotab_browse_up.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/act_icotab_browse_up.png</Icon>
+        </IconGroup>
+        <IconGroup id="ico_gma_presetadd.png">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_gma_presetadd.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_gma_presetadd.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_gma_presetadd.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_gma_presetadd.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_gma_presetadd.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_gma_presetadd.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_gma_presetadd.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_gma_presetadd.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_gma_presetadd.png</Icon>
+        </IconGroup>
+        <IconGroup id="ico_gma_presetremove.png">
+          <Icon width="30" height="30">controller://driver/MiYue/icons/30x30/ico_gma_presetremove.png</Icon>
+          <Icon width="45" height="40">controller://driver/MiYue/icons/45x40/ico_gma_presetremove.png</Icon>
+          <Icon width="70" height="60">controller://driver/MiYue/icons/70x60/ico_gma_presetremove.png</Icon>
+          <Icon width="90" height="80">controller://driver/MiYue/icons/90x80/ico_gma_presetremove.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootLanguage">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_language.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_language.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_language.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_language.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_language.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_language.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_language.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_language.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_language.png</Icon>
+        </IconGroup>
+        <IconGroup id="ico_tunein_recents">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_recents.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_recents.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_recents.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_recents.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_recents.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_recents.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_recents.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_recents.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_recents.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootLocalRadio">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_localradio.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_localradio.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_localradio.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_localradio.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_localradio.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_localradio.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_localradio.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_localradio.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_localradio.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootLocation">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_location.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_location.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_location.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_location.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_location.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_location.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_location.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_location.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_location.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootMusic">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_music.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_music.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_music.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_music.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_music.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_music.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_music.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_music.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_music.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootMyFavorites">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_myfavorites.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_myfavorites.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_myfavorites.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_myfavorites.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_myfavorites.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_myfavorites.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_myfavorites.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_myfavorites.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_myfavorites.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootNews">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_news.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_news.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_news.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_news.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_news.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_news.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_news.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_news.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_news.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootPodcast">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_podcast.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_podcast.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_podcast.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_podcast.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_podcast.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_podcast.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_podcast.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_podcast.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_podcast.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootSettings">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_settings.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_settings.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_settings.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_settings.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_settings.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_settings.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_settings.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_settings.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_settings.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootSports">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_sports.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_sports.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_sports.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_sports.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_sports.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_sports.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_sports.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_sports.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_sports.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootTalk">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_talk.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_talk.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_talk.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_talk.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_talk.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_talk.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_talk.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_talk.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_talk.png</Icon>
+        </IconGroup>
+        <IconGroup id="RootTrending">
+          <Icon width="25" height="25">controller://driver/MiYue/icons/25x25/ico_tunein_trending.png</Icon>
+          <Icon width="45" height="45">controller://driver/MiYue/icons/45x45/ico_tunein_trending.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/ico_tunein_trending.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/ico_tunein_trending.png</Icon>
+          <Icon width="65" height="65">controller://driver/MiYue/icons/65x65/ico_tunein_trending.png</Icon>
+          <Icon width="68" height="68">controller://driver/MiYue/icons/68x68/ico_tunein_trending.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/ico_tunein_trending.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/ico_tunein_trending.png</Icon>
+          <Icon width="136" height="136">controller://driver/MiYue/icons/136x136/ico_tunein_trending.png</Icon>
+        </IconGroup>
+        <IconGroup id="lis_rha_ico_add.png">
+          <Icon width="100" height="100">controller://driver/MiYue/icons/100x100/lis_rha_ico_add.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/110x110/lis_rha_ico_add.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/lis_rha_ico_add.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/130x130/lis_rha_ico_add.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/140x140/lis_rha_ico_add.png</Icon>
+          <Icon width="20" height="20">controller://driver/MiYue/icons/20x20/lis_rha_ico_add.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/30x30/lis_rha_ico_add.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/40x40/lis_rha_ico_add.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/lis_rha_ico_add.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/lis_rha_ico_add.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/70x70/lis_rha_ico_add.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/80x80/lis_rha_ico_add.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/lis_rha_ico_add.png</Icon>
+        </IconGroup>
+        <IconGroup id="lis_rha_ico_play.png">
+          <Icon width="100" height="100">controller://driver/MiYue/icons/100x100/lis_rha_ico_play.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/110x110/lis_rha_ico_play.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/120x120/lis_rha_ico_play.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/130x130/lis_rha_ico_play.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/140x140/lis_rha_ico_play.png</Icon>
+          <Icon width="20" height="20">controller://driver/MiYue/icons/20x20/lis_rha_ico_play.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/30x30/lis_rha_ico_play.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/40x40/lis_rha_ico_play.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/50x50/lis_rha_ico_play.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/60x60/lis_rha_ico_play.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/70x70/lis_rha_ico_play.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/80x80/lis_rha_ico_play.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/90x90/lis_rha_ico_play.png</Icon>
+        </IconGroup>
+        <IconGroup id="np_repeat">
+          <Icon width="20" height="20">controller://driver/MiYue/icons/np_repeat/np_repeat_20.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/np_repeat/np_repeat_30.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/np_repeat/np_repeat_40.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/np_repeat/np_repeat_50.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/np_repeat/np_repeat_60.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/np_repeat/np_repeat_70.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/np_repeat/np_repeat_80.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/np_repeat/np_repeat_90.png</Icon>
+          <Icon width="100" height="100">controller://driver/MiYue/icons/np_repeat/np_repeat_100.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/np_repeat/np_repeat_110.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/np_repeat/np_repeat_120.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/np_repeat/np_repeat_130.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/np_repeat/np_repeat_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="np_repeat_a">
+          <Icon width="20" height="20">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_20.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_30.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_40.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_50.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_60.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_70.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_80.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_90.png</Icon>
+          <Icon width="100" height="100">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_100.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_110.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_120.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_130.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/np_repeat_a/np_repeat_a_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="np_shuffle">
+          <Icon width="20" height="20">controller://driver/MiYue/icons/np_shuffle/np_shuffle_20.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/np_shuffle/np_shuffle_30.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/np_shuffle/np_shuffle_40.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/np_shuffle/np_shuffle_50.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/np_shuffle/np_shuffle_60.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/np_shuffle/np_shuffle_70.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/np_shuffle/np_shuffle_80.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/np_shuffle/np_shuffle_90.png</Icon>
+          <Icon width="100" height="100">controller://driver/MiYue/icons/np_shuffle/np_shuffle_100.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/np_shuffle/np_shuffle_110.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/np_shuffle/np_shuffle_120.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/np_shuffle/np_shuffle_130.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/np_shuffle/np_shuffle_140.png</Icon>
+        </IconGroup>
+        <IconGroup id="np_shuffle_a">
+          <Icon width="20" height="20">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_20.png</Icon>
+          <Icon width="30" height="30">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_30.png</Icon>
+          <Icon width="40" height="40">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_40.png</Icon>
+          <Icon width="50" height="50">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_50.png</Icon>
+          <Icon width="60" height="60">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_60.png</Icon>
+          <Icon width="70" height="70">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_70.png</Icon>
+          <Icon width="80" height="80">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_80.png</Icon>
+          <Icon width="90" height="90">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_90.png</Icon>
+          <Icon width="100" height="100">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_100.png</Icon>
+          <Icon width="110" height="110">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_110.png</Icon>
+          <Icon width="120" height="120">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_120.png</Icon>
+          <Icon width="130" height="130">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_130.png</Icon>
+          <Icon width="140" height="140">controller://driver/MiYue/icons/np_shuffle_a/np_shuffle_a_140.png</Icon>
+        </IconGroup>
+      </Icons>
+      <Tabs>
+        <Tab>
+          <Name>Browse Source</Name>
+          <ScreenId>BrowseStations</ScreenId>
+          <IconId>RootLocation</IconId>
+        </Tab>
+        <Tab>
+          <Name>Favorites</Name>
+          <ScreenId>BrowseFavorites</ScreenId>
+          <IconId>RootMyFavorites</IconId>
+        </Tab>
+        <Tab>
+          <Name>Settings</Name>
+          <ScreenId>Settings</ScreenId>
+          <IconId>RootSettings</IconId>
+        </Tab>
+      </Tabs>
+      <Screens>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseStations</Id>
+          <DataCommand>
+            <Name>GetBrowseStationsMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <List>
+            <DefaultAction>BrowseStations</DefaultAction>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseFavorites</Id>
+          <DataCommand>
+            <Name>GetBrowseFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <List>
+            <DefaultAction>BrowseFavorites</DefaultAction>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseLocalMusic</Id>
+          <DataCommand>
+            <Name>GetBrowseStationsMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <WillTranslate>
+            <Property>translate</Property>
+            <ValidValues>
+              <Value>true</Value>
+            </ValidValues>
+          </WillTranslate>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>ReplacePlaylist AddTrackToNext AddTrackToQueue</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseRadio</Id>
+          <DataCommand>
+            <Name>GetBrowseStationsMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>PlayTrack AddToFavorites</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseDouban</Id>
+          <DataCommand>
+            <Name>GetBrowseStationsMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>PlayTrack AddToFavorites</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseWangYiYun</Id>
+          <DataCommand>
+            <Name>GetBrowseStationsMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>ReplacePlaylist AddTrackToNext AddTrackToQueue  ColletedBoards</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseCollectedMusic</Id>
+          <DataCommand>
+            <Name>GetBrowseFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>ReplacePlaylist AddTrackToNext AddTrackToQueue  DelColletedMusic</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseCollectedSonglist</Id>
+          <DataCommand>
+            <Name>GetBrowseFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>ReplacePlaylist AddTrackToQueue  DelColletedSongList</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseCollectedBoards</Id>
+          <DataCommand>
+            <Name>GetBrowseFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>ReplacePlaylist AddTrackToQueue  DelColletedBoards</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>BrowseCollectedRadios</Id>
+          <DataCommand>
+            <Name>GetBrowseFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>search</Name>
+                <Type>SEARCH</Type>
+                <!-- This parameter will contain the search query if the user is searching for something -->
+              </Param>
+              <Param>
+                <Name>search_filter</Name>
+                <Type>SEARCH_FILTER</Type>
+                <!-- This parameter will contain the search filter Id if the user is searching for something -->
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>PlayTrack AddTrackToNext AddTrackToQueue DelColletedRadios</ActionIds>
+            <TitleProperty>text</TitleProperty>
+            <SubTitleProperty>subtext</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="ListScreenType">
+          <Id>MyFavorites</Id>
+          <DataCommand>
+            <Name>GetMyFavoritesMenu</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>MyFavorites</Value>
+              </Param>
+              <Param>
+                <Name>Title</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>Title</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+            </Params>
+          </DataCommand>
+          <PaginationStyle>ALPHA</PaginationStyle>
+          <List>
+            <ActionIds>PlayTrack AddTrackToQueue</ActionIds>
+            <TitleProperty>Title</TitleProperty>
+            <SubTitleProperty>SubTitle</SubTitleProperty>
+            <ImageProperty>ImageUrl</ImageProperty>
+            <LengthProperty>length</LengthProperty>
+            <IsLink>
+              <Property>folder</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsLink>
+            <IsHeader>
+              <Property>is_header</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </IsHeader>
+            <WillTranslate>
+              <Property>translate</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </WillTranslate>
+          </List>
+        </Screen>
+        <Screen xsi:type="SettingsScreenType">
+          <Id>Settings</Id>
+          <DataCommand>
+            <Name>GetSettings</Name>
+            <Type>PROTOCOL</Type>
+          </DataCommand>
+          <Item>
+            <HeaderTxt>Settings</HeaderTxt>
+          </Item>
+          <Item>
+            <Label>AUX SWITCH</Label>
+            <OnOff propertyName="ToggleButton" />
+          </Item>
+          <Item>
+            <Label>Bluetooth</Label>
+            <OnOff propertyName="CheckBox" />
+          </Item>
+          <Item>
+            <Label>SPDIF</Label>
+            <OnOff propertyName="SPDIF" />
+          </Item>
+          <Item>
+            <Label>IP Address</Label>
+            <Text propertyName="IP" />
+          </Item>
+          <Item>
+            <Label>Player Status</Label>
+            <Text propertyName="Status" />
+          </Item>
+          <Item>
+            <Label>Scan Progress</Label>
+            <Text propertyName="scan" />
+          </Item>
+          <Item>
+            <Button>
+              <Name>Scan</Name>
+              <Command>
+                <Name>SubmitButtonCommand</Name>
+                <Type>PROTOCOL</Type>
+              </Command>
+            </Button>
+          </Item>
+        </Screen>
+      </Screens>
+      <NowPlaying>
+        <Image />
+        <List>
+          <ActionIds>NowPlaying Preset Shuffle Repeat Order</ActionIds>
+          <TitleProperty>Title</TitleProperty>
+          <!-- <SubTitleProperty>SubTitle</SubTitleProperty>-->
+          <ImageProperty>ImageUrl</ImageProperty>
+          <IsHeader>
+            <Property>header</Property>
+            <ValidValues>
+              <Value>true</Value>
+            </ValidValues>
+          </IsHeader>
+          <WillTranslate>
+            <Property>translate</Property>
+            <ValidValues>
+              <Value>true</Value>
+            </ValidValues>
+          </WillTranslate>
+        </List>
+      </NowPlaying>
+      <Actions>
+        <Action>
+          <Id>Shuffle</Id>
+          <Name>Turn Shuffle On</Name>
+          <IconId>np_shuffle</IconId>
+          <Command>
+            <Name>ToggleShuffle</Name>
+            <Type>PROTOCOL</Type>
+          </Command>
+          <Filters>
+            <Filter>
+              <Type>Disable</Type>
+              <Property>can_shuffle</Property>
+              <ValidValues>
+                <Value>false</Value>
+              </ValidValues>
+            </Filter>
+          </Filters>
+        </Action>
+        <Action>
+          <Id>Repeat</Id>
+          <Name>Turn Repeat On</Name>
+          <IconId>np_repeat</IconId>
+          <Command>
+            <Name>ToggleRepeat</Name>
+            <Type>PROTOCOL</Type>
+          </Command>
+          <Filters>
+            <Filter>
+              <Type>Disable</Type>
+              <Property>can_repeat</Property>
+              <ValidValues>
+                <Value>false</Value>
+              </ValidValues>
+            </Filter>
+          </Filters>
+        </Action>
+        <Action>
+          <Id>Order</Id>
+          <Name>Turn Order On</Name>
+          <IconId>ico_tunein_recents</IconId>
+          <Command>
+            <Name>ToggleOrder</Name>
+            <Type>PROTOCOL</Type>
+          </Command>
+          <Filters>
+            <Filter>
+              <Type>Disable</Type>
+              <Property>can_order</Property>
+              <ValidValues>
+                <Value>false</Value>
+              </ValidValues>
+            </Filter>
+          </Filters>
+        </Action>
+        <Action>
+          <Id>Preset</Id>
+          <Name>Add to Favorites</Name>
+          <IconId>RootMyFavorites</IconId>
+          <Command>
+            <Name>PresetCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>is_preset</Value>
+              </Param>
+            </Params>
+          </Command>
+          <Filters>
+            <Filter>
+              <Type>Disable</Type>
+              <Property>can_preset</Property>
+              <ValidValues>
+                <Value>false</Value>
+              </ValidValues>
+            </Filter>
+            <Filter>
+              <Type>Change</Type>
+              <Name>Remove Favorite</Name>
+              <IconId>ico_gma_presetremove.png</IconId>
+              <MultiSelectAction>AllMatch</MultiSelectAction>
+              <NoSelection />
+              <Property>is_preset</Property>
+              <ValidValues>
+                <Value>true</Value>
+              </ValidValues>
+            </Filter>
+          </Filters>
+        </Action>
+        <Action>
+          <Id>PlayTrack</Id>
+          <!--播放 -->
+          <Name>Play</Name>
+          <IconId>lis_rha_ico_play.png</IconId>
+          <Command>
+            <Name>play</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>playType</Name>
+                <Type>DEFAULT</Type>
+                <Value>PLAY</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>AddTrackToQueue</Id>
+          <!--添加到当前播放列表-->
+          <Name>Add To Queue</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>AddToQueue</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>playType</Name>
+                <Type>DEFAULT</Type>
+                <Value>ADD_TO_QUEUE</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>AddTrackToNext</Id>
+          <!--添加到下一曲-->
+          <Name>Add To Next</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>AddToNext</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>playType</Name>
+                <Type>DEFAULT</Type>
+                <Value>ADD_TO_QUEUE</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>ReplacePlaylist</Id>
+          <!--替换当前播放列表 -->
+          <Name>Replace PlayList</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>ReplacePlaylist</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>listtype</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>listtype</Value>
+              </Param>
+              <Param>
+                <Name>indexID</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>indexID</Value>
+              </Param>
+              <Param>
+                <Name>playType</Name>
+                <Type>DEFAULT</Type>
+                <Value>ADD_TO_QUEUE</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>ColletedBoards</Id>
+          <!--收藏榜单 -->
+          <Name>ColletedBoards</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>AddColletedBoards</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>DelColletedBoards</Id>
+          <!--DEL收藏榜单 -->
+          <Name>DelColletedBoards</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>DelColletedBoards</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>DelColletedRadios</Id>
+          <!--DEL收藏榜单 -->
+          <Name>DelColletedRadios</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>DelColletedRadios</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>DelColletedSongList</Id>
+          <!--DEL收藏歌单 -->
+          <Name>DelColletedSongList</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>DelColletedSongList</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>DelColletedMusic</Id>
+          <!--DEL 收藏歌曲 -->
+          <Name>DelColletedMusic</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>DelColletedMusic</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>singer</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>singer</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>AddToFavorites</Id>
+          <!--收藏歌曲 -->
+          <Name>Add To Favorites</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>AddToFavorites</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>SongSheet</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>songSrc</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>songSrc</Value>
+              </Param>
+              <Param>
+                <Name>IndexID</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>indexID</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>BrowseMedia</Id>
+          <Name>Build Media List</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>BrowseMusicCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseMusic</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>item</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>item</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>is_preset</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>BrowseMusicCollection</Id>
+          <Name>Browse Music Collection</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>BrowseMusicCollectionCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseMusicCollection</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>item</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>item</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>is_preset</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>BrowseStations</Id>
+          <Name>Build Station List</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>BrowseStationsCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>item</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>item</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>is_preset</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>BrowseFavorites</Id>
+          <Name>Build Station List</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>BrowseFavoritesCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseFavorites</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>item</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>item</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>is_preset</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>PlayStations</Id>
+          <Name>Build Station List</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>PlayStationsCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>BrowseStations</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>URL</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>URL</Value>
+              </Param>
+              <Param>
+                <Name>item</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>item</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>is_preset</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>text</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>text</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <!-- This is the name of the data property of the selected item that will be sent as the param -->
+                <Value>ImageUrl</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+        <Action>
+          <Id>NowPlaying</Id>
+          <Name>Play</Name>
+          <IconId>lis_rha_ico_add.png</IconId>
+          <Command>
+            <Name>NowPlayingCommand</Name>
+            <Type>PROTOCOL</Type>
+            <Params>
+              <Param>
+                <Name>screen</Name>
+                <Type>DEFAULT</Type>
+                <Value>NowPlaying</Value>
+              </Param>
+              <Param>
+                <Name>Id</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>Id</Value>
+              </Param>
+              <Param>
+                <Name>key</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>key</Value>
+              </Param>
+              <Param>
+                <Name>type</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>type</Value>
+              </Param>
+              <Param>
+                <Name>Title</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>Title</Value>
+              </Param>
+              <Param>
+                <Name>ImageUrl</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>ImageUrl</Value>
+              </Param>
+              <Param>
+                <Name>is_preset</Name>
+                <Type>FIRST_SELECTED</Type>
+                <Value>is_preset</Value>
+              </Param>
+            </Params>
+          </Command>
+        </Action>
+      </Actions>
+      <Dashboard>
+        <Transport>
+          <Id>Play</Id>
+          <ButtonType>PLAY</ButtonType>
+          <ReleaseCommand>
+            <Name>PLAY</Name>
+            <Type>ROOM</Type>
+          </ReleaseCommand>
+        </Transport>
+        <Transport>
+          <Id>Pause</Id>
+          <ButtonType>PAUSE</ButtonType>
+          <ReleaseCommand>
+            <Name>PAUSE</Name>
+            <Type>ROOM</Type>
+          </ReleaseCommand>
+        </Transport>
+        <Transport>
+          <Id>SkipRev</Id>
+          <ButtonType>SKIP_REV</ButtonType>
+          <ReleaseCommand>
+            <Name>TransportSkipRevButton</Name>
+            <Type>PROTOCOL</Type>
+          </ReleaseCommand>
+        </Transport>
+        <Transport>
+          <Id>SkipFwd</Id>
+          <ButtonType>SKIP_FWD</ButtonType>
+          <ReleaseCommand>
+            <Name>TransportSkipFwdButton</Name>
+            <Type>PROTOCOL</Type>
+          </ReleaseCommand>
+        </Transport>
+      </Dashboard>
+      <DriverNotifications>
+        <Notification>
+          <Id>SettingsNotification</Id>
+          <IconId>PLAY</IconId>
+          <Buttons>
+            <Button>
+              <Name>OK</Name>
+              <ScreenId>Settings</ScreenId>
+            </Button>
+          </Buttons>
+        </Notification>
+        <Notification>
+          <Id>BrowseMusicCollectionNotification</Id>
+          <Buttons>
+            <Button>
+              <Name>Play Now</Name>
+              <Command>
+                <Name>BMCN_PlayNow</Name>
+                <Type>PROTOCOL</Type>
+              </Command>
+            </Button>
+            <Button>
+              <Name>Add to Queue</Name>
+              <Command>
+                <Name>BMCN_AddToQueue</Name>
+                <Type>PROTOCOL</Type>
+              </Command>
+            </Button>
+          </Buttons>
+        </Notification>
+      </DriverNotifications>
+    </UI>
+  </capabilities>
+  <connections>
+    <connection>
+      <id>5001</id>
+      <facing>6</facing>
+      <connectionname>Hello World</connectionname>
+      <type>2</type>
+      <consumer>False</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>False</linelevel>
+      <classes>
+        <class>
+          <classname>MediaService</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5002">
+      <id>7001</id>
+      <type>7</type>
+      <connectionname>Output Audio End-Point</connectionname>
+      <consumer>False</consumer>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>AUDIO_SELECTION</classname>
+        </class>
+        <class>
+          <classname>AUDIO_VOLUME</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>5002</id>
+      <type>2</type>
+      <connectionname>AVSWITCH</connectionname>
+      <consumer>False</consumer>
+      <linelevel>False</linelevel>
+      <classes>
+        <class>
+          <classname>AVSWITCH</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5002">
+      <id>4001</id>
+      <type>6</type>
+      <connectionname>Audio Out</connectionname>
+      <consumer>False</consumer>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>STEREO</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5001">
+      <id>4002</id>
+      <type>6</type>
+      <connectionname>Audio Out</connectionname>
+      <consumer>False</consumer>
+      <linelevel>False</linelevel>
+      <idautobind>25201</idautobind>
+      <classes>
+        <class>
+          <classname>RF_MIYUE_MUSIC</classname>
+          <autobind>True</autobind>
+        </class>
+      </classes>
+    </connection>
+    <connection proxybindingid="5002">
+      <id>3001</id>
+      <type>6</type>
+      <connectionname>MIYUE</connectionname>
+      <consumer>True</consumer>
+      <linelevel>False</linelevel>
+      <idautobind>25201</idautobind>
+      <classes>
+        <class>
+          <classname>RF_MIYUE_MUSIC</classname>
+          <autobind>True</autobind>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>5002</id>
+      <connectionname>miyue</connectionname>
+      <facing>6</facing>
+      <type>2</type>
+      <consumer>false</consumer>
+      <audiosource>false</audiosource>
+      <videosource>false</videosource>
+      <linelevel>false</linelevel>
+      <classes>
+        <class>
+          <classname>AVSWITCH</classname>
+        </class>
+      </classes>
+    </connection>
+    <connection>
+      <id>6001</id>
+      <facing>6</facing>
+      <connectionname>IP</connectionname>
+      <type>4</type>
+      <consumer>True</consumer>
+      <audiosource>False</audiosource>
+      <videosource>False</videosource>
+      <linelevel>True</linelevel>
+      <classes>
+        <class>
+          <classname>TCP</classname>
+          <ports>
+            <port>
+              <number>60001</number>
+              <auto_connect>True</auto_connect>
+              <monitor_connection>True</monitor_connection>
+              <keep_connection>True</keep_connection>
+            </port>
+          </ports>
+        </class>
+      </classes>
+    </connection>
+  </connections>
+  <config>
+    <power_management_method>AlwaysOn</power_management_method>
+    <power_command_delay>0</power_command_delay>
+    <power_delay>0</power_delay>
+    <power_command_needed>False</power_command_needed>
+    <serialsettings>9600 8 none 1 none 232</serialsettings>
+    <documentation file="changelog.rtf"></documentation>
+    <actions>
+      <action>
+        <name>StartScan</name>
+        <command>Scan</command>
+      </action>
+    </actions>
+    <commands>
+      <command>
+        <name>SelectLocalmusic</name>
+        <description>Select  LocalMusic PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>LocalMusic</name>
+            <type>CUSTOM_SELECT:GetLocalMusic</type>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SelectPlayList</name>
+        <description> Select PlayList PARAM1 on NAME </description>
+        <params>
+          <param>
+            <name>PlayList</name>
+            <type>CUSTOM_SELECT:GetPlayList</type>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SelectBoards</name>
+        <description> Select Boards PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>Boards</name>
+            <type>CUSTOM_SELECT:GetBoards</type>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SelectRadios</name>
+        <description> Select Radios PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>Radios</name>
+            <type>CUSTOM_SELECT:GetRadios</type>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>AUX</name>
+        <description>Set AUX  PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>AUX</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>ON</item>
+              <item>OFF</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>BLUETOOTH</name>
+        <description>Set Bluetooth  PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>Bluetooth</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>ON</item>
+              <item>OFF</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>SPDIF</name>
+        <description>Set SPDIF PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>SPDIF</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>ON</item>
+              <item>OFF</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
+        <name>PLAY MODE</name>
+        <description>Set Play mode PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>PlayMode</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>Repeat</item>
+              <item>Shuffle</item>
+              <item>Single cycle</item>
+              <item>order</item>
+            </items>
+          </param>
+        </params>
+      </command>
+    </commands>
+    <properties>
+      <property>
+        <name>Connection Status</name>
+        <type>STRING</type>
+        <default>OFFLINE</default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Scan Progress</name>
+        <type>STRING</type>
+        <default>Display Scan Status</default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Driver Version</name>
+        <type>STRING</type>
+        <default></default>
+        <readonly>true</readonly>
+      </property>
+      <property>
+        <name>Debug Mode</name>
+        <type>LIST</type>
+        <default>false</default>
+        <items>
+          <item>false</item>
+          <item>true</item>
+        </items>
+      </property>
+    </properties>
+    <script file="driver.lua" encryption="2" />
+  </config>
+</devicedata>

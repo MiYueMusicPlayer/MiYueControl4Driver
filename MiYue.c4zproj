@@ -1,0 +1,19 @@
+﻿<Driver type="c4z" name="MiYue" squishLua="true" manualsquish="false">
+ <Items>
+  <Item type="dir" c4zDir="www" name="www" recurse="true" exclude="false" />
+  <Item type="file" name="action.lua" />
+  <Item type="file" name="cmd.lua" />
+  <Item type="file" name="commands.lua" />
+  <Item type="file" name="driver.lua" />
+  <Item type="file" name="driver.xml" />
+  <Item type="file" name="feedback.lua" />
+  <Item type="file" name="parsemessage.lua" />
+  <Item type="file" name="changelog.rtf" />
+ </Items>
+ <Squishy>
+  <File>action.lua</File>
+  <File>cmd.lua</File>
+  <File>feedback.lua</File>
+  <File>parsemessage.lua</File>
+ </Squishy>
+</Driver>

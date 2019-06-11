@@ -1,0 +1,35 @@
+# Browse tab
+msgid "Browse"
+msgstr "Browse"
+
+# My Favorites tab
+msgid "My Favorites"
+msgstr "My Favorites"
+
+# Search filter All
+msgid "All"
+msgstr "All"
+
+# Search filter Songs
+msgid "Songs"
+msgstr "Songs"
+
+# Search filter Artists
+msgid "Artists"
+msgstr "Artists"
+
+# Search filter Stations
+msgid "Stations"
+msgstr "Stations"
+
+# Search filter Shows
+msgid "Shows"
+msgstr "Shows"
+
+# Action Add to Favorites
+msgid "Add to Favorites"
+msgstr "Add to Favorites"
+
+# Action Remove preset
+msgid "Remove preset"
+msgstr "Remove preset"

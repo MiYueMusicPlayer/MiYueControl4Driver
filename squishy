@@ -1,0 +1,9 @@
+Main "driver.lua"
+
+Module "commands" "commands.lua"
+Module "action" "action.lua"
+Module "parsemessage" "parsemessage.lua"
+Module "feedback" "feedback.lua"
+Module "cmd" "cmd.lua"
+
+Output "driver.lua.squished"
