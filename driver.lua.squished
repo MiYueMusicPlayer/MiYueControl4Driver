@@ -129,6 +129,7 @@ function SendPlaylistCommand(id)
 end
  end)
 package.preload['action'] = (function (...)
+--主机发送数据到播放器的方法处理
 
 ProxyHelper = {}
 ProxyHelper.TCPReceiveBuf = ""
@@ -152,7 +153,7 @@ function ProxyHelper.BuildCommand(data)
 end
 
 function ProxyHelper.SendCommand(cmd)
-     print(cmd)
+     --print(cmd)
 	C4:SendToNetwork(6001,60001,ProxyHelper.BuildCommand(cmd))
 end
 
@@ -179,6 +180,7 @@ function ProxyHelper.SendCommandList()
 	   end
 	end
 end
+
 
 function ProxyHelper.SaveInfo(musictype,musicdata)
 	-- 保存媒体数据
@@ -307,7 +309,7 @@ end
 
  end)
 package.preload['parsemessage'] = (function (...)
---
+--媒体数据处理
 -- Untitled.lua
 --
 ParseMessage = {}
@@ -640,7 +642,7 @@ function build_MediaByKeyTable(data)
 end
  end)
 package.preload['feedback'] = (function (...)
---
+--播放器反馈数据处理
 -- Untitled.lua
 --
 gCurrentVolume = 0
@@ -1473,7 +1475,7 @@ end
 function PRX_CMD.SELECT_SOURCE(idBinding,tParams)
     
 end end)
-
+--程序入口
 
 require "cmd"    --对外和协议内命令实现
 require "feedback"   --数据反馈处理
