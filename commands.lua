@@ -4,6 +4,7 @@
 
 --处理编程选项
 
+
 function GetLocalMusic()
      local list ={}
     for i = 1, #g_LocalMusic do
@@ -112,7 +113,34 @@ function ExecuteCommand(strCommand, tParams)
 		  end
 		  ProxyHelper.SendCommand(message)
 --Single cycle
-		  
+
+     elseif(strCommand == "SENCE ACTION") then
+	       local message = nil
+		  if(tParams.SenceAction == "sences01") then
+			  message  = '{"action":"action.excute.sensor","info":"sences01"}'
+			 -- ProxyHelper.SendCommand(message)
+		  elseif(tParams.SenceAction == "sences02") then
+			  message  = '{"action":"action.excute.sensor","info":"sences02"}'
+			 -- ProxyHelper.SendCommand(message)
+		  elseif(tParams.SenceAction == "sences03") then
+			  message  = '{"action":"action.excute.sensor","info":"sences03"}'
+		  elseif(tParams.SenceAction == "sences04") then
+			  message  = '{"action":"action.excute.sensor","info":"sences04"}'
+		  elseif(tParams.SenceAction == "sences05") then
+			  message  = '{"action":"action.excute.sensor","info":"sences05"}'
+		  elseif(tParams.SenceAction == "sences06") then
+			  message  = '{"action":"action.excute.sensor","info":"sences06"}'
+		  elseif(tParams.SenceAction == "sences07") then
+			  message  = '{"action":"action.excute.sensor","info":"sences07"}'
+		  elseif(tParams.SenceAction == "sences08") then
+			  message  = '{"action":"action.excute.sensor","info":"sences08"}'
+		  elseif(tParams.SenceAction == "sences09") then
+			  message  = '{"action":"action.excute.sensor","info":"sences09"}'
+		  else
+			 message  = '{"action":"action.excute.sensor","info":"sences10"}'
+	
+		  end
+         ProxyHelper.SendCommand(message)
 	end	
 end
 

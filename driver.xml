@@ -5,8 +5,8 @@
   <name>MIYUE Media Service </name>
   <model>MUSIC PLAYER</model>
   <created>06/01/2019 12:47 PM</created>
-  <modified>06/01/2019 12:47 PM</modified>
-  <version>101</version>
+  <modified>05/17/2021 17:47 PM</modified>
+  <version>106</version>
   <small>devices_sm\c4.gif</small>
   <large>devices_lg\c4.gif</large>
   <control>lua_gen</control>
@@ -1950,6 +1950,29 @@
     </actions>
     <commands>
       <command>
+        <name>SENCE ACTION</name>
+        <description>Set Sences PARAM1 on NAME</description>
+        <params>
+          <param>
+            <name>SenceAction</name>
+            <type>LIST</type>
+            <default></default>
+            <items>
+              <item>sences01</item>
+              <item>sences02</item>
+              <item>sences03</item>
+              <item>sences04</item>
+              <item>sences05</item>
+              <item>sences06</item>
+              <item>sences07</item>
+              <item>sences08</item>
+              <item>sences09</item>
+              <item>sences10</item>
+            </items>
+          </param>
+        </params>
+      </command>
+      <command>
         <name>SelectLocalmusic</name>
         <description>Select  LocalMusic PARAM1 on NAME</description>
         <params>
@@ -2068,7 +2091,7 @@
       <property>
         <name>Driver Version</name>
         <type>STRING</type>
-        <default></default>
+        <default>1.06</default>
         <readonly>true</readonly>
       </property>
       <property>
