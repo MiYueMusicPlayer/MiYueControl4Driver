@@ -12,41 +12,6 @@ function ParseMessage.LocalMusic( strData )
 	   C4:UpdateProperty("Scan Progress","获取本地歌曲信息中")
      end
 end
-
-function ParseMessage.RadioInfo(strData)  --电台数据
-	-- body
-	print("starting to parsemessage radio")
-	ProxyHelper.RadioList = strData.infos or {}
-	ProxyHelper.SaveInfo("radiolist",json:encode(strData.infos))
-     for k,v in pairs(ProxyHelper.RadioList) do
-		 local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
-		 ProxyHelper.AddCommandList(cmd)
-	end
-	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(3)
-	   gCurrentScan = gCurrentScan + 1
-	   C4:UpdateProperty("Scan Progress","获取在线电台数据中!")
-     end
-end
-
-
-function ParseMessage.CloudInfo( strData )   --网易云数据下载到本地
-
-    print("starting to parse wangyiyun data")
-	ProxyHelper.CloudList = strData.infos or {}
-	ProxyHelper.SaveInfo("wangyiyun",json:encode(strData.infos))
-    for k,v in pairs(ProxyHelper.CloudList) do
-		local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
-		ProxyHelper.AddCommandList(cmd)
-	end
-	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(4)
-	   gCurrentScan = gCurrentScan + 1
-	   C4:UpdateProperty("Scan Progress"," 获取网易云信息中 !")
-     end
-	--gScan = true
-end
-
 function ParseMessage.GetcollectedSonglist(strData)  --获取下载收藏歌单
 	-- body
 	ProxyHelper.SongList = strData.infos or {}
@@ -78,7 +43,7 @@ function ParseMessage.GetcollectedRadios(strData)  --获取收藏电台
 	ProxyHelper.CollectedRadios = strData.infos or {}
 	ProxyHelper.SaveInfo("CollectedRadios",json:encode(strData.infos))
 	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(8)
+	   ProxyHelper.GetNextMediaLib(5)
 	   gCurrentScan = gCurrentScan + 1
 	   C4:UpdateProperty("Scan Progress"," 获取收藏电台数据中")
     end
@@ -90,7 +55,7 @@ function ParseMessage.GetcollectedBoards(strData ) --获取收藏的排行榜
 	ProxyHelper.CollectedBoards = strData.infos or {}
 	ProxyHelper.SaveInfo("CollectedBoards",json:encode(strData.infos))
 	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(7)
+	   ProxyHelper.GetNextMediaLib(4)
 	   gCurrentScan = gCurrentScan + 1
 	   C4:UpdateProperty("Scan Progress"," 获取收藏榜单数据中")
     end
@@ -101,27 +66,11 @@ function ParseMessage.GetcollectedMusic( strData )  -- 获取收藏的歌曲
 	ProxyHelper.CollectedMusic = strData.infos or {}
 	ProxyHelper.SaveInfo("CollectedMusic",json:encode(strData.infos))
 	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(6)
+	   ProxyHelper.GetNextMediaLib(3)
 	   gCurrentScan = gCurrentScan + 1
 	   C4:UpdateProperty("Scan Progress","获取收藏的歌曲数据中 !")
      end
 end
-
-
-function ParseMessage.GetDouban(strData)
-    ProxyHelper.Douban = strData.infos or {}
-	ProxyHelper.SaveInfo("douban",json:encode(strData.infos))
-	for k,v in pairs(ProxyHelper.Douban) do
-		local cmd = '{"action":"action.request.boardMusicInfos","id":'.. v.id .."}"
-		ProxyHelper.AddCommandList(cmd)
-	end
-	if(g_SCAN) then
-	   ProxyHelper.GetNextMediaLib(5)
-	   gCurrentScan = gCurrentScan + 1
-	   C4:UpdateProperty("Scan Progress"," 获取豆瓣FM数据中!")
-     end
-end
-
 function ParseMessage.BoardMusicInfos( strData )   --每个歌单详细数据的下载保存
 	-- 
 	print("starting to parse music infos")
@@ -149,50 +98,6 @@ function BrowseLocalMusic(idBinding,tParams)
     end
     build_MediaByKeyTable(g_LocalMusic)
     DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
-end
-
-function BrowseRadioList(idBinding,tParams)
-	-- body
-	local tListItems = {}
-	g_RadioList = ProxyHelper.ReadInfo("radiolist")
-	local length = #g_RadioList
-	for i = 1 ,length do 
-		local id = g_RadioList[i].id
-		local title = g_RadioList[i].songlistTitle
-		print(title)
-		local tmp = {type = "radio" , folder = "true" , subtext = "" ,text = title, key = id}
-		table.insert(tListItems,tmp)
-	end
-	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
-end
-
-function BrowseDouban(idBinding,tParams)
-	-- body
-	local tListItems = {}
-	g_Douban = ProxyHelper.ReadInfo("douban")
-	local length = #g_Douban
-	for i = 1 ,length do 
-		local id = g_Douban[i].id
-		local title = g_Douban[i].songlistTitle
-		--print(title)
-		local tmp = {type = "douban" , folder = "true" , subtext = "" ,text = title, key = id}
-		table.insert(tListItems,tmp)
-	end
-	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
-end
-
-function BrowseWangYiYun(idBinding,tParams)
-    local tListItems = {}
-    g_WangYiYun = ProxyHelper.ReadInfo("wangyiyun")
-    local length = #g_WangYiYun
-    for i = 1 ,length do 
-		local id = g_WangYiYun[i].id
-		local title = g_WangYiYun[i].songlistTitle
-		local ImageUrl = g_WangYiYun[i].iconUrl
-		local tmp = {type = "wangyiyun" , folder = "true" , subtext = "" ,text = title, key = id,ImageUrl = ImageUrl,indexID = id,musicindex = i}
-		table.insert(tListItems,tmp)
-	end
-	DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], tListItems, true)
 end
 
 function BrowseCollectedBoards(idBinding,tParams)

@@ -1,2 +1,4 @@
 driver.lua.squished
 squishy
+*.path
+.idea/

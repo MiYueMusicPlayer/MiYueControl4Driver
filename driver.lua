@@ -46,12 +46,12 @@ g_DriverVersion = "V1.06"
 
 function ProxyHelper.GetNextMediaLib(seq)	
 	-- body
-	local lib = {"localmusic","raido","wangyiyun","douban","collectedMusic","collectedBoards","collectedRadios","collectedSonglist"}
+	local lib = {"localmusic","collectedMusic","collectedBoards","collectedRadios","collectedSonglist"}
 
-	local msg_id = {'{"action":"action.request.getlocalMusic"}','{"action":"action.request.getradioInfo"}',
-	                '{"action":"action.request.getwangyiboards"}','{"action":"action.douban.getdirinfos"}',
-				 '{"action":"action.request.collectedMusic"}','{"action":"action.request.collectedBoards"}',
-				 '{"action":"action.request.collectedRadios"}',
+	local msg_id = {'{"action":"action.request.getlocalMusic"}',
+				    '{"action":"action.request.collectedMusic"}',
+				    '{"action":"action.request.collectedBoards"}',
+				    '{"action":"action.request.collectedRadios"}',
 	                '{"action":"action.request.collectedSonglist"}'}
 	if (lib[seq]) then							--first, request media lib accordingly
 		--print("Start to request " ..lib[seq])
@@ -102,10 +102,7 @@ end
 
 
 g_browse_mainmenu = {
-	{type = "local", folder = "true", text = "本机", URL = "", key = "local", ImageUrl = gMediaPath .. "ico_tunein_music.png"},
-	{type = "link", folder = "true", text = "电台", URL = "", key = "radio", ImageUrl = gMediaPath .."ico_tunein_news.png"},
-	{type = "link", folder = "true", text = "网易云", URL = "", key = "wangyi", ImageUrl = gMediaPath .."ico_tunein_trending.png"},
-	{type = "link", folder = "true", text = "豆瓣FM", URL = "", key = "douban", ImageUrl = gMediaPath .."ico_tunein_trending.png"},
+	{type = "local", folder = "true", text = "本机", URL = "", key = "local", ImageUrl = gMediaPath .. "ico_tunein_music.png"}
 }
 
 g_browse_music = {
@@ -499,10 +496,10 @@ function OnTimerExpired(idTimer)
 	   		--end
 	   
      elseif(idTimer == DriverHelper.CheckScan ) then
-		  if(gCurrentScan == 8) then
+		  if(gCurrentScan == 5) then
 			 gCurrentScan = 0
 			 DriverHelper.CheckScan = DriverHelper.KillTimer(DriverHelper.CheckScan)
-		  elseif(gCurrentScan <8) then
+		  elseif(gCurrentScan <5) then
 			 ProxyHelper.GetNextMediaLib(gCurrentScan)	
 		  end
 		

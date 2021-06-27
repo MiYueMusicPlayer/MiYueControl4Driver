@@ -5,8 +5,8 @@
   <name>MIYUE Media Service </name>
   <model>MUSIC PLAYER</model>
   <created>06/01/2019 12:47 PM</created>
-  <modified>05/17/2021 17:47 PM</modified>
-  <version>106</version>
+  <modified>06/27/2021 22:16PM</modified>
+  <version>107</version>
   <small>devices_sm\c4.gif</small>
   <large>devices_lg\c4.gif</large>
   <control>lua_gen</control>
@@ -526,191 +526,6 @@
                 <Value>true</Value>
               </ValidValues>
             </IsHeader>
-          </List>
-        </Screen>
-        <Screen xsi:type="ListScreenType">
-          <Id>BrowseRadio</Id>
-          <DataCommand>
-            <Name>GetBrowseStationsMenu</Name>
-            <Type>PROTOCOL</Type>
-            <Params>
-              <Param>
-                <Name>screen</Name>
-                <Type>DEFAULT</Type>
-                <Value>BrowseStations</Value>
-              </Param>
-              <Param>
-                <Name>URL</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>URL</Value>
-              </Param>
-              <Param>
-                <Name>key</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>key</Value>
-              </Param>
-              <Param>
-                <Name>search</Name>
-                <Type>SEARCH</Type>
-                <!-- This parameter will contain the search query if the user is searching for something -->
-              </Param>
-              <Param>
-                <Name>search_filter</Name>
-                <Type>SEARCH_FILTER</Type>
-                <!-- This parameter will contain the search filter Id if the user is searching for something -->
-              </Param>
-            </Params>
-          </DataCommand>
-          <PaginationStyle>ALPHA</PaginationStyle>
-          <List>
-            <ActionIds>PlayTrack AddToFavorites</ActionIds>
-            <TitleProperty>text</TitleProperty>
-            <SubTitleProperty>subtext</SubTitleProperty>
-            <ImageProperty>ImageUrl</ImageProperty>
-            <LengthProperty>length</LengthProperty>
-            <IsLink>
-              <Property>folder</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsLink>
-            <IsHeader>
-              <Property>is_header</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsHeader>
-            <WillTranslate>
-              <Property>translate</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </WillTranslate>
-          </List>
-        </Screen>
-        <Screen xsi:type="ListScreenType">
-          <Id>BrowseDouban</Id>
-          <DataCommand>
-            <Name>GetBrowseStationsMenu</Name>
-            <Type>PROTOCOL</Type>
-            <Params>
-              <Param>
-                <Name>screen</Name>
-                <Type>DEFAULT</Type>
-                <Value>BrowseStations</Value>
-              </Param>
-              <Param>
-                <Name>URL</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>URL</Value>
-              </Param>
-              <Param>
-                <Name>key</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>key</Value>
-              </Param>
-              <Param>
-                <Name>search</Name>
-                <Type>SEARCH</Type>
-                <!-- This parameter will contain the search query if the user is searching for something -->
-              </Param>
-              <Param>
-                <Name>search_filter</Name>
-                <Type>SEARCH_FILTER</Type>
-                <!-- This parameter will contain the search filter Id if the user is searching for something -->
-              </Param>
-            </Params>
-          </DataCommand>
-          <PaginationStyle>ALPHA</PaginationStyle>
-          <List>
-            <ActionIds>PlayTrack AddToFavorites</ActionIds>
-            <TitleProperty>text</TitleProperty>
-            <SubTitleProperty>subtext</SubTitleProperty>
-            <ImageProperty>ImageUrl</ImageProperty>
-            <LengthProperty>length</LengthProperty>
-            <IsLink>
-              <Property>folder</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsLink>
-            <IsHeader>
-              <Property>is_header</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsHeader>
-            <WillTranslate>
-              <Property>translate</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </WillTranslate>
-          </List>
-        </Screen>
-        <Screen xsi:type="ListScreenType">
-          <Id>BrowseWangYiYun</Id>
-          <DataCommand>
-            <Name>GetBrowseStationsMenu</Name>
-            <Type>PROTOCOL</Type>
-            <Params>
-              <Param>
-                <Name>screen</Name>
-                <Type>DEFAULT</Type>
-                <Value>BrowseStations</Value>
-              </Param>
-              <Param>
-                <Name>URL</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>URL</Value>
-              </Param>
-              <Param>
-                <Name>key</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>key</Value>
-              </Param>
-              <Param>
-                <Name>text</Name>
-                <Type>FIRST_SELECTED</Type>
-                <Value>text</Value>
-              </Param>
-              <Param>
-                <Name>search</Name>
-                <Type>SEARCH</Type>
-                <!-- This parameter will contain the search query if the user is searching for something -->
-              </Param>
-              <Param>
-                <Name>search_filter</Name>
-                <Type>SEARCH_FILTER</Type>
-                <!-- This parameter will contain the search filter Id if the user is searching for something -->
-              </Param>
-            </Params>
-          </DataCommand>
-          <PaginationStyle>ALPHA</PaginationStyle>
-          <List>
-            <ActionIds>ReplacePlaylist AddTrackToNext AddTrackToQueue  ColletedBoards</ActionIds>
-            <TitleProperty>text</TitleProperty>
-            <SubTitleProperty>subtext</SubTitleProperty>
-            <ImageProperty>ImageUrl</ImageProperty>
-            <LengthProperty>length</LengthProperty>
-            <IsLink>
-              <Property>folder</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsLink>
-            <IsHeader>
-              <Property>is_header</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </IsHeader>
-            <WillTranslate>
-              <Property>translate</Property>
-              <ValidValues>
-                <Value>true</Value>
-              </ValidValues>
-            </WillTranslate>
           </List>
         </Screen>
         <Screen xsi:type="ListScreenType">
@@ -2091,7 +1906,7 @@
       <property>
         <name>Driver Version</name>
         <type>STRING</type>
-        <default>1.06</default>
+        <default>1.07</default>
         <readonly>true</readonly>
       </property>
       <property>

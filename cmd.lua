@@ -100,20 +100,7 @@ function PRX_CMD.BrowseStationsCommand(idBinding, tParams)	--二级页面浏览�
 	   nextscreen = "<NextScreen>BrowseLocalMusic</NextScreen>"
 	  -- GetNextMediaLib(1)
 	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
-	   g_key = args.key  
-	 elseif(args.type == "radio") then
-	   nextscreen = "<NextScreen>BrowseRadio</NextScreen>"
-	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
 	   g_key = args.key
-     elseif(args.type == "douban") then
-	   nextscreen = "<NextScreen>BrowseDouban</NextScreen>"
-	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
-	   g_key = args.key
-	 elseif(args.type == "wangyiyun") then
-	 	nextscreen = "<NextScreen>BrowseWangYiYun</NextScreen>"
-	   DataReceived(idBinding, tParams["NAVID"], tParams["SEQ"], nextscreen)
-	   g_key = args.key
-	   
      end
 	
 end 

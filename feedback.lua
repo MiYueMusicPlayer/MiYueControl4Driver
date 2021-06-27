@@ -15,10 +15,11 @@ function ParseFeedback(strData)
 		return
 	end
     if(response.result == 200) then
-	    local msg_id = {["action.request.getlocalMusic"] = "LocalMusic",["action.request.getradioInfo"] = "RadioInfo",
-						    ["action.request.getwangyiboards"] = "CloudInfo",["action.request.boardMusicInfos"] = "BoardMusicInfos",
-						    ["action.request.collectedMusic"] = "GetcollectedMusic",["action.request.collectedBoards"] = "GetcollectedBoards",
-						    ["action.request.collectedRadios"] = "GetcollectedRadios",["action.request.collectedSonglist"] = "GetcollectedSonglist",["action.douban.getdirinfos"] = "GetDouban"}
+	    local msg_id = {["action.request.getlocalMusic"] = "LocalMusic",
+						["action.request.collectedMusic"] = "GetcollectedMusic",
+						["action.request.collectedBoards"] = "GetcollectedBoards",
+						["action.request.collectedRadios"] = "GetcollectedRadios",
+						["action.request.collectedSonglist"] = "GetcollectedSonglist"}
 	   if(type(ParseMessage[msg_id[response.action]]) == "function") then
 	   
 		  ParseMessage[msg_id[response.action]](response)
@@ -122,20 +123,20 @@ function ParseFeedback(strData)
 	   
 	   elseif(response.action == "action.collect.musics") then
 	   
-			 ProxyHelper.GetNextMediaLib(5)
+			 ProxyHelper.GetNextMediaLib(2)
 			 
        elseif(response.action == "action.response.collectDataChanged") then
 			 local flag = tonumber(response.flag)
 			 if(flag == -1) then
-				ProxyHelper.GetNextMediaLib(5)
+				ProxyHelper.GetNextMediaLib(2)
 			 elseif(flag == -2) then
-				ProxyHelper.GetNextMediaLib(7)
+				ProxyHelper.GetNextMediaLib(4)
 			 elseif(flag == -3) then
-				ProxyHelper.GetNextMediaLib(6)
+				ProxyHelper.GetNextMediaLib(3)
 			 elseif(flag == -4) then
-				ProxyHelper.GetNextMediaLib(8)
+				ProxyHelper.GetNextMediaLib(5)
 			 elseif(flag >0) then
-				ProxyHelper.GetNextMediaLib(8)
+				ProxyHelper.GetNextMediaLib(5)
 			 end
 			 
         elseif(response.action == "action.request.getVolume") then
